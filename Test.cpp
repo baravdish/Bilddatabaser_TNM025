@@ -4,6 +4,6 @@ using namespace std;
 
 int main()
 {
-	cout << "Hello" << endl;
+	cout << "Testing plugins..." << endl;
 	return 0;
 }
