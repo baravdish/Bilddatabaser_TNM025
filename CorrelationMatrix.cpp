@@ -3,8 +3,18 @@
 
 #include "CorrelationMatrix.h"
  
-// Constructor
+// Constructor (RGB or IC2?)
 CorrelationMatrix::CorrelationMatrix()
 {
     
+}
+
+void CorrelationMatrix::generateHistogram()
+{
+
+}
+
+void CorrelationMatrix::print()
+{
+	
 }
