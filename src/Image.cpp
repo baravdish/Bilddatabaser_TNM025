@@ -1,26 +1,33 @@
 #include "Image.hpp"
  
 // Constructor
-Image::Image(Mat image_src)
+Image::Image(Mat image_src) :
+img(image_src)
 {
-	// The image matrix
-	image_matrix = image_src;
 
-	// The size of the matrix
-	int rows = image_matrix.rows;
-	int cols = image_matrix.cols;
-	Size s = image_matrix.size();
-	size_x = s.width;
-	size_y = s.height;
 }
 
-// cout the pixel values of this image and imshow the image
+CorrelationMatrix Image::generateCorrelationMatrix()
+{
+
+}
+
+// Prints the pixel values of this image and imshow the image
 void Image::print()
 {
 	// Show the image
-	imshow(image_matrix);
+	imshow(img);
 
 	// Print the matrix
-	cout << "Image matrix = " << endl << " " << image_matrix << endl << endl;
+	for(int i=0; i < img.rows; i++)
+	{
+		for(int j=0; j < img.cols; j++)
+    	{
+    		cout << img.at<Vec3b>(i,j)[0] << " " 
+				 << img.at<Vec3b>(i,j)[1] << " " 
+				 << img.at<Vec3b>(i,j)[2] << " | ";
+    	}
+    	cout << endl;
+	}	
 }
 
