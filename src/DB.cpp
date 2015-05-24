@@ -1,9 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include "DB.hpp"
 
-#include "DB.h"
-#include "Image.h" // to create Image objects
- 
 // Constructor
 DB::DB()
 {

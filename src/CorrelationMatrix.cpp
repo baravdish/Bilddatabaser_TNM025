@@ -1,8 +1,5 @@
-#include <iostream>
-#include <opencv2/opencv.hpp>
+#include "CorrelationMatrix.hpp"
 
-#include "CorrelationMatrix.h"
- 
 // Constructor (RGB or IC2?)
 CorrelationMatrix::CorrelationMatrix()
 {

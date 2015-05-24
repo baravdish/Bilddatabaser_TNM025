@@ -1,6 +1,8 @@
 #ifndef DB_H
 #define DB_H
- 
+#include "Image.hpp"
+#include <vector>
+
 class DB
 {
 	private:

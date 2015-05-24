@@ -6,9 +6,11 @@
 #include "CorrelationMatrix.cpp"
 
 using namespace std;
+using namespace cv;
 
 int main()
 {
+	Mat img;
 	cout << "This is main!" << endl;
 	return 0;
 }

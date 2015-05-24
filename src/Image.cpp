@@ -1,20 +1,9 @@
-#include <iostream>
-#include <opencv2/opencv.hpp>
-
-#include "Image.h"
-#include "CorrelationMatrix.h" // To have objects of matrices
+#include "Image.hpp"
  
 // Constructor
 Image::Image()
 {
-	image_matrix = null;
-	image_size[0] = null;
-   	image_size[1] = null;
-}
-
-int Image::getSize()
-{
-	return image_size;
+	image_matrix = NULL;
 }
 
 // cout the pixel values of this image and imshow the image
