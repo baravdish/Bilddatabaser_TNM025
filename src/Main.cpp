@@ -1,16 +1,15 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-#include "DB.cpp"
-#include "Image.cpp"
-#include "CorrelationMatrix.cpp"
+#include "DB.hpp"
+#include "Image.hpp"
+#include "CorrelationMatrix.hpp"
 
 using namespace std;
 using namespace cv;
 
 int main()
 {
-	Mat img;
 	cout << "This is main!" << endl;
 	return 0;
 }
