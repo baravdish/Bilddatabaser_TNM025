@@ -8,7 +8,9 @@
 class Image
 {
 	private:
-	 	Mat image_matrix;
+	 	Mat<double> image_matrix;
+	 	int size_x;
+	 	int size_y;
 	 	vector<CorrelationMatrix> correlation_mat_RGB;
 	 	vector<CorrelationMatrix> correlation_mat_IC2;
 	public:
