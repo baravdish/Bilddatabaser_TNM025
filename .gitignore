@@ -1,0 +1,10 @@
+*.vcxproj
+*.filters
+*.props
+*.sln
+*.suo
+*.opensdf
+*.user
+*.sdf
+*.jpg
+*.dll
