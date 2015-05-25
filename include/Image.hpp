@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <opencv2\opencv.hpp>
+#include <CorrelationMatrix.hpp>
 
 class Image
 {
@@ -13,6 +14,7 @@ class Image
 	 	vector<CorrelationMatrix> correlation_mat_IC2;
 	public:
 	    Image(Mat image_src);
+		Mat getImage();
 	    void print(); // Prints the pixel values of this image and imshow the image
 	    CorrelationMatrix generateCorrelationMatrix();
 };

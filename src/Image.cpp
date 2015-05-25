@@ -12,11 +12,15 @@ CorrelationMatrix Image::generateCorrelationMatrix()
 
 }
 
+Mat Image::getImage()
+{
+	return img;
+}
 // Prints the pixel values of this image and imshow the image
 void Image::print()
 {
 	// Show the image
-	imshow(img);
+	//imshow(img);
 
 	// Print the matrix
 	for(int i=0; i < img.rows; i++)

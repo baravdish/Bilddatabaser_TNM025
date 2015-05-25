@@ -7,9 +7,8 @@ DB::DB(string directory, vector<string> folders)
 	DIR *directory_path;
 	struct dirent *dirp;
 	string temp = directory;
-	std::map<string, int> folderSizes;
 	
-	for (int n = 0; n < folders.size(); n++)
+	for (size_t n = 0; n < folders.size(); n++)
 	{
 		vector<int> invalidImages;
 		int nImages = 0;
@@ -27,6 +26,7 @@ DB::DB(string directory, vector<string> folders)
 			{
 				filepath = directory + "/" + dirp->d_name;
 				cv::Mat image = imread(filepath, 1);
+				Image img(image);
 				if (!image.data)
 				{
 					//cout << "Could not read data" << endl;
@@ -34,7 +34,7 @@ DB::DB(string directory, vector<string> folders)
 				}
 				else
 				{
-					image_vector.push_back(image);
+					images.push_back(img);
 					nImages++;
 				}
 				invImages++;
@@ -44,13 +44,13 @@ DB::DB(string directory, vector<string> folders)
 		// Connect each folder name with its size
 		folderSizes[folders[n]] = nImages;
 
-		printInvalidImageInformation(invalidImages, folders[n], image_vector.size());
+		printInvalidImageInformation(invalidImages, folders[n], images.size());
 
 		closedir(directory_path);
 
 	} // END OF: folder iteration
 	
-	cout << endl << endl << "Total number of loaded images in the database: " << image_vector.size() << endl;
+	cout << endl << endl << "Total number of loaded images in the database: " << images.size() << endl;
 
 	cout << "==============================================" << endl;
 	for (auto elem : folderSizes)
@@ -76,6 +76,16 @@ void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, 
 	}
 
 	cout << "----------------------------------------" << endl << endl << endl;
+}
+
+vector<Image> DB::getImageDatabase()
+{
+	return images;
+}
+
+Mat DB::getImage(int n)
+{
+	return images[n].getImage();
 }
 
 void DB::loadImages()

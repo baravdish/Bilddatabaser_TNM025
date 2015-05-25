@@ -5,6 +5,14 @@
 #include <iterator>
 #include <opencv2\opencv.hpp>
 
+// Visual studio complains about collision with std and cv.
+// A simple solution...
+using std::cout;
+using std::cin;
+using std::endl;
+using std::vector;
+using std::string;
+using std::map;
 using namespace cv;
 
 class CorrelationMatrix
