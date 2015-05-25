@@ -11,14 +11,12 @@ img(image_src)
 	img.convertTo(img, CV_64FC3);
 	pixel_values_mat_RGB = img.reshape(1, 3).t();
 
-	correlation_matrix_RGB = generateCorrelationMatrixRGB(pixel_values_mat_RGB);
+	generateCorrelationMatrixRGB(pixel_values_mat_RGB);
 }
 
-Mat Image::generateCorrelationMatrixRGB(Mat img_pixel_values)
+void Image::generateCorrelationMatrixRGB(Mat img_pixel_values)
 {
-	Mat C = img_pixel_values.t()*img_pixel_values;
-
-	return C;
+	correlation_matrix_RGB = img_pixel_values.t()*img_pixel_values;
 }
 
 // Return correlation matrix for this image
@@ -33,14 +31,21 @@ Mat Image::getImage()
 	return img;
 }
 
-void Image::calculateEigenvalues()
+// Return eigenvalues
+Mat Image::getEigenvalues()
 {
-
+	return eigenvalues;
 }
 
-void Image::calculateEigenvectors()
+// Return eigenvectors
+Mat Image::getEigenvectors()
 {
+	return eigenvectors;
+}
 
+void Image::calculateEigvalAndEigvec()
+{
+	eigen(correlation_matrix_RGB, eigenvalues, eigenvectors);
 }
 
 void generateHistogram()

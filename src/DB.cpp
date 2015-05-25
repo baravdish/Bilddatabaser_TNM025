@@ -29,7 +29,12 @@ vector<Image> DB::getImageDatabase()
 	return images;
 }
 
-Mat DB::getImage(int n)
+Image DB::getImage(int n)
+{
+	return images[n];
+}
+
+Mat DB::getMatImage(int n)
 {
 	return images[n].getImage();
 }

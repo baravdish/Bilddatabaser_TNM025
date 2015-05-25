@@ -22,17 +22,18 @@ class Image
 		Mat histogram_IC2;
 		Mat correlation_matrix_RGB;
 		Mat correlation_matrix_IC2;
-		vector<double> eigenvectors;
-		vector<double> eigenvalues;
+		Mat eigenvectors;
+		Mat eigenvalues;
 
 	public:
 
 	    Image(Mat image_src); // Constructor, image matrix needed
 		Mat getImage(); // Return this image matrix
-		Mat generateCorrelationMatrixRGB(Mat RGB_pixels);
+		Mat getEigenvalues();
+		Mat getEigenvectors();
 		Mat getCorrelationMatrixRGB();
-		void calculateEigenvectors();
-		void calculateEigenvalues();
+		void generateCorrelationMatrixRGB(Mat RGB_pixels);
+		void calculateEigvalAndEigvec();
 		void print(); // Prints the pixel values of this image and imshow the image
 		void print(int x, int y); // Prints the pixel value (RGB/IC2) in specific pixel
 };

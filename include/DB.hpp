@@ -21,7 +21,8 @@ class DB
 	    void saveImages();
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
 		vector<Image> getImageDatabase();
-		Mat getImage(int n);
+		Image getImage(int n);
+		Mat getMatImage(int n);
 };
  
 #endif
