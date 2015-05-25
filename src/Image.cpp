@@ -13,6 +13,10 @@ CorrelationMatrix Image::generateCorrelationMatrix()
 	return corr_mat;
 }
 
+Mat Image::getImage()
+{
+	return img;
+}
 // Prints the pixel values of this image and imshow the image
 void Image::print()
 {

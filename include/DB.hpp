@@ -7,28 +7,21 @@
 #include "dirent.h"
 
 //using namespace std;
-
-// Visual studio complains about collision with std and cv.
-// A simple solution...
-using std::cout;
-using std::cin;
-using std::endl;
-using std::vector;
-using std::string;
-using std::map;
 using namespace cv;
 
 class DB
 {
 	private:
 	 	vector<Image> images;
-		vector<Mat> image_vector;
+		std::map<string, int> folderSizes;
+		
 	public:
 	    DB(string directory, vector<string> folders);
 	    void loadImages();
 	    void saveImages();
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
-		vector<Mat> getImageDatabase();
+		vector<Image> getImageDatabase();
+		Mat getImage(int n);
 };
  
 #endif
