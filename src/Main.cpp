@@ -20,6 +20,11 @@ int main()
 	// Initilize the database
 	DB animal_database = DB();
 	animal_database.loadImages(mainDirectory, animalFolder);
+	
+	
+	//Image a = animal_database.getImage(1);
+	//float range[] = { 0, 255 };
+	//animal_database.getImage(1).generateHistograms(a.getImage(), 128, range);
 
 	system("pause");
 	return 0;

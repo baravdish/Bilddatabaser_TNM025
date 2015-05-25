@@ -8,15 +8,16 @@ img(image_src)
 	//if (image_src.type() != 16)
 		//cvtColor(image_src, img, CV_GRAY2BGR);
 
+	// Convert to double
 	img.convertTo(img, CV_64FC3);
-	pixel_values_mat_RGB = img.reshape(1, 3).t();
-
-	generateCorrelationMatrixRGB(pixel_values_mat_RGB);
 }
 
-void Image::generateCorrelationMatrixRGB(Mat img_pixel_values)
+void Image::generateCorrelationMatrixRGB(Mat image_src)
 {
-	correlation_matrix_RGB = img_pixel_values.t()*img_pixel_values;
+	// Reshape matrix to 3xN
+	// TODO: Test this!! should be 3xN * Nx3 =====> check if pixel_values_mat_RGB is 3xN!!!
+	pixel_values_mat_RGB = image_src.reshape(1, 3).t();
+	correlation_matrix_RGB = pixel_values_mat_RGB.t()*pixel_values_mat_RGB;
 }
 
 // Return correlation matrix for this image
@@ -48,9 +49,17 @@ void Image::calculateEigvalAndEigvec()
 	eigen(correlation_matrix_RGB, eigenvalues, eigenvectors);
 }
 
-void generateHistogram()
+// Calculate histogram
+void Image::generateHistograms(Mat image_src, int hist_size, float range[])
 {
+	vector<Mat> bgr_planes;
+	split(image_src, bgr_planes);
+	const float* histRange = { range };
 
+	// ============> TODO: Do we need to normalize this? <=============
+	calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &hist_size, &histRange, true, false);
+	calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &hist_size, &histRange, true, false);
+	calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &hist_size, &histRange, true, false);
 }
 
 // Prints the pixel values of this image and imshow the image
