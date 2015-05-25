@@ -22,20 +22,19 @@ void Image::print()
 		std::cout << "Could not open or find the image" << std::endl;
 	}
 	cv::imshow("Image", img);
-	cv::waitKey(5000);
+	cv::waitKey(10);
 
 	// Print the matrix
-	
 	for(int i=0; i < img.rows; i++)
 	{
 		for(int j=0; j < img.cols; j++)
     	{
-    		std::cout << img.at<Vec3b>(i,j)[0] << " " 
-				 << img.at<Vec3b>(i,j)[1] << " " 
-				 << img.at<Vec3b>(i,j)[2] << " | ";
+			std::cout << (int)img.at<Vec3b>(i, j)[0] << " "
+				      << (int)img.at<Vec3b>(i, j)[1] << " "
+					  << (int)img.at<Vec3b>(i, j)[2] << " | ";
     	}
 		std::cout << std::endl;
-	}	
+	}
 	
 }
 
