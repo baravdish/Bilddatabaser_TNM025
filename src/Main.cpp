@@ -3,7 +3,6 @@
 
 #include "DB.hpp"
 #include "Image.hpp"
-#include "CorrelationMatrix.hpp"
 
 int main()
 {
@@ -22,6 +21,8 @@ int main()
 	DB animal_database = DB();
 	animal_database.loadImages(mainDirectory, animalFolder);
 	
+
+
 	system("pause");
 	return 0;
 }

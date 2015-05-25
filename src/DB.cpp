@@ -34,6 +34,8 @@ Mat DB::getImage(int n)
 	return images[n].getImage();
 }
 
+
+
 void DB::loadImages(string directory, vector<string> folders)
 {
 	DIR *directory_path;
