@@ -26,7 +26,6 @@ DB::DB(string directory, vector<string> folders)
 			{
 				filepath = directory + "/" + dirp->d_name;
 				cv::Mat image = imread(filepath, 1);
-				Image img(image);
 				if (!image.data)
 				{
 					//cout << "Could not read data" << endl;
@@ -34,6 +33,7 @@ DB::DB(string directory, vector<string> folders)
 				}
 				else
 				{
+					Image img(image);
 					images.push_back(img);
 					nImages++;
 				}
@@ -44,14 +44,14 @@ DB::DB(string directory, vector<string> folders)
 		// Connect each folder name with its size
 		folderSizes[folders[n]] = nImages;
 
-		printInvalidImageInformation(invalidImages, folders[n], images.size());
+		//printInvalidImageInformation(invalidImages, folders[n], images.size());
 
 		closedir(directory_path);
 
 	} // END OF: folder iteration
 	
 	cout << endl << endl << "Total number of loaded images in the database: " << images.size() << endl;
-
+	
 	cout << "==============================================" << endl;
 	for (auto elem : folderSizes)
 	{

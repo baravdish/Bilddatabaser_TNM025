@@ -4,19 +4,41 @@
 Image::Image(Mat image_src) :
 img(image_src)
 {
+	//There are no grayscaled images in current database
+	//if (image_src.type() != 16)
+		//cvtColor(image_src, img, CV_GRAY2BGR);
 
+	pixel_values_mat_RGB = img.reshape(1, 3).t();	
+
+	//correlation_matrix_RGB = generateCorrelationMatrixRGB(pixel_values_mat_RGB);
+	
 }
 
-CorrelationMatrix Image::generateCorrelationMatrix()
+Mat Image::generateCorrelationMatrixRGB(Mat img_pixel_values)
 {
-	CorrelationMatrix corr_mat = CorrelationMatrix();
-	return corr_mat;
+	return img_pixel_values.t()*img_pixel_values;
 }
 
 Mat Image::getImage()
 {
 	return img;
 }
+
+void Image::calculateEigenvalues()
+{
+
+}
+
+void Image::calculateEigenvectors()
+{
+
+}
+
+void generateHistogram()
+{
+
+}
+
 // Prints the pixel values of this image and imshow the image
 void Image::print()
 {
