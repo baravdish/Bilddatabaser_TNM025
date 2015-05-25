@@ -26,10 +26,11 @@ class Image
 		vector<double> eigenvalues;
 
 	public:
+
 	    Image(Mat image_src); // Constructor, image matrix needed
 		Mat getImage(); // Return this image matrix
 		Mat generateCorrelationMatrixRGB(Mat RGB_pixels);
-		Mat* getCorrelationMatrixRGB();
+		Mat getCorrelationMatrixRGB();
 		void calculateEigenvectors();
 		void calculateEigenvalues();
 		void print(); // Prints the pixel values of this image and imshow the image

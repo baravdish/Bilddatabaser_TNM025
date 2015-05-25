@@ -8,6 +8,7 @@ img(image_src)
 	//if (image_src.type() != 16)
 		//cvtColor(image_src, img, CV_GRAY2BGR);
 
+	img.convertTo(img, CV_64FC3);
 	pixel_values_mat_RGB = img.reshape(1, 3).t();
 
 	correlation_matrix_RGB = generateCorrelationMatrixRGB(pixel_values_mat_RGB);
@@ -15,16 +16,15 @@ img(image_src)
 
 Mat Image::generateCorrelationMatrixRGB(Mat img_pixel_values)
 {
-	//Mat C = img_pixel_values.t()*img_pixel_values;
-	
-	Mat C;
+	Mat C = img_pixel_values.t()*img_pixel_values;
+
 	return C;
 }
 
 // Return correlation matrix for this image
-Mat* Image::getCorrelationMatrixRGB()
+Mat Image::getCorrelationMatrixRGB()
 {
-	return &correlation_matrix_RGB;
+	return correlation_matrix_RGB;
 }
 
 // Return this image matrix
