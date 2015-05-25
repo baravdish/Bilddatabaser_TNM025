@@ -1,10 +1,8 @@
 #ifndef IMAGE_H
 #define IMAGE_H
-#include "CorrelationMatrix.hpp"
 #include <iostream>
 #include <vector>
 #include <opencv2\opencv.hpp>
-#include <CorrelationMatrix.hpp>
 
 class Image
 {
@@ -20,12 +18,14 @@ class Image
 		Mat correlation_matrix;
 
 	public:
-	    Image(Mat image_src);
-		Mat getImage();
+	    Image(Mat image_src); // Constructor, image matrix needed
+		Mat getImage(); // Return this image matrix
 	    void print(); // Prints the pixel values of this image and imshow the image
+
 		Mat generateCorrelationMatrixRGB(Mat RGB_pixels);
 		void calculateEigenvectors();
 		void calculateEigenvalues();
+		void print(int x, int y); // Prints the pixel value (RGB/IC2) in specific pixel
 };
  
 #endif

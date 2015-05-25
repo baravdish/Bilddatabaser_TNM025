@@ -16,8 +16,8 @@ class DB
 		std::map<string, int> folderSizes;
 		
 	public:
-	    DB(string directory, vector<string> folders);
-	    void loadImages();
+	    DB();
+		void loadImages(string directory, vector<string> folders);
 	    void saveImages();
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
 		vector<Image> getImageDatabase();

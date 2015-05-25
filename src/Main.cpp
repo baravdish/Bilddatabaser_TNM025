@@ -16,11 +16,12 @@ int main()
 	
 	vector<string> inputFolders = { "animal2", "beach2", "cat2", "colorful2",
 								    "doll2", "elegant2", "flower2", "food2", "formal2", "garden2" };
-	vector<string> testFolder = { "animal2" };
+	vector<string> animalFolder = { "animal2" };
 
 	// Initilize the database
-	DB database = DB(mainDirectory, testFolder);
-
+	DB animal_database = DB();
+	animal_database.loadImages(mainDirectory, animalFolder);
+	
 	system("pause");
 	return 0;
 }

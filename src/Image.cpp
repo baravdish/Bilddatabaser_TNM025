@@ -19,6 +19,7 @@ Mat Image::generateCorrelationMatrixRGB(Mat img_pixel_values)
 	return img_pixel_values.t()*img_pixel_values;
 }
 
+// Return this image matrix
 Mat Image::getImage()
 {
 	return img;
@@ -60,7 +61,11 @@ void Image::print()
 					  << (int)img.at<Vec3b>(i, j)[2] << " | ";
     	}
 		std::cout << std::endl;
-	}
-	
+	}	
+}
+
+void Image::print(int x, int y)
+{
+	std::cout << img.at<Vec3b>(x, y) << std::endl;
 }
 
