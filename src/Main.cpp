@@ -5,11 +5,17 @@
 #include "Image.hpp"
 #include "CorrelationMatrix.hpp"
 
-using namespace std;
-using namespace cv;
 
 int main()
 {
-	cout << "This is main!" << endl;
+	// Setup directory and folder paths, no recursive solution yet
+	string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
+	vector<string> inputFolders = { "animal2", "beach2", "cat2", "colorful2",
+								    "doll2", "elegant2", "flower2", "food2", "formal2", "garden2" };
+
+	// Initilize the database
+	DB database = DB(mainDirectory, inputFolders);
+	
+	system("pause");
 	return 0;
 }
