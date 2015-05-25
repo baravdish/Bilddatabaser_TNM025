@@ -8,12 +8,13 @@
 class Image
 {
 	private:
-	 	Mat image_matrix;
+	 	Mat img;
 	 	vector<CorrelationMatrix> correlation_mat_RGB;
 	 	vector<CorrelationMatrix> correlation_mat_IC2;
 	public:
-	    Image();
-	    void print(); // cout the pixel values of this image and imshow the image
+	    Image(Mat image_src);
+	    void print(); // Prints the pixel values of this image and imshow the image
+	    CorrelationMatrix generateCorrelationMatrix();
 };
  
 #endif
