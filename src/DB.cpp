@@ -34,9 +34,9 @@ Image DB::getImage(int n)
 	return images[n];
 }
 
-Mat DB::getMatImage(int n)
+Mat DB::getImageMat(int n)
 {
-	return images[n].getImage();
+	return images[n].getImageMat();
 }
 
 
@@ -64,15 +64,17 @@ void DB::loadImages(string directory, vector<string> folders)
 			while ((dirp = readdir(directory_path)))
 			{
 				filepath = directory + "/" + dirp->d_name;
-				cv::Mat image = imread(filepath, 1);
-				if (!image.data)
+				cv::Mat image_temp = imread(filepath, 1);
+				if (!image_temp.data)
 				{
 					//cout << "Could not read data" << endl;
 					invalidImages.push_back(invImages);
 				}
 				else
 				{
-					Image img(image);
+					Image img(image_temp);
+					img.calculateCorrelationMatrixRGB(img.getImageMat());
+					img.calculateEigvalAndEigvec();
 					images.push_back(img);
 					nImages++;
 				}

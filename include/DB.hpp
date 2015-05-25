@@ -22,7 +22,7 @@ class DB
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
 		vector<Image> getImageDatabase();
 		Image getImage(int n);
-		Mat getMatImage(int n);
+		Mat getImageMat(int n);
 };
  
 #endif
