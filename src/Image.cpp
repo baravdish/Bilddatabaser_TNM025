@@ -13,6 +13,7 @@ CorrelationMatrix Image::generateCorrelationMatrix()
 	return corr_mat;
 }
 
+// Return this image matrix
 Mat Image::getImage()
 {
 	return img;
