@@ -13,7 +13,8 @@ class Image
 	 	vector<CorrelationMatrix> correlation_mat_IC2;
 	public:
 	    Image(Mat image_src);
-	    void print(); // Prints the pixel values of this image and imshow the image
+	    void print(); // Prints the pixel values (RGB/IC2) of this image and imshow the image
+		void print(int x, int y); // Prints the pixel value (RGB/IC2) in specific pixel
 	    CorrelationMatrix generateCorrelationMatrix();
 };
  
