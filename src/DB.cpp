@@ -46,7 +46,7 @@ DB::DB(Mat img_source, int size_of_patch)
 }
 
 // TODO: Maybe send in a new DB with matched images?
-void DB::reconstructImageFromDB()
+void DB::reconstructImageFromDB(DB matched_images_DB)
 {
 	// Check if the DB has an Image source
 	if (image.data == NULL)
@@ -70,7 +70,7 @@ void DB::reconstructImageFromDB()
 		{
 			for (int x = 0; x < nPatchesX; x++)
 			{
-				getImage(x + y*nPatchesX).getImageMat().copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)));
+				matched_images_DB.getImageMat(x + y*nPatchesX).copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)));
 			}
 		}
 
@@ -170,7 +170,7 @@ void DB::loadImages(string directory, vector<string> folders)
 	}
 }
 
-void DB::saveImages()
+void DB::saveImage()
 {
 
 }
