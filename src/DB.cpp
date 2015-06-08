@@ -1,9 +1,9 @@
-#include "DB.hpp"
+﻿#include "DB.hpp"
 
 // Constructor
 DB::DB()
 {
-
+	image.data = NULL;
 }
 
 // Create DB from an Image
@@ -42,6 +42,40 @@ DB::DB(Mat img_source, int size_of_patch)
 			Image temp_img = Image(patch);
 			images.push_back(temp_img);
 		}
+	}
+}
+
+// TODO: Maybe send in a new DB with matched images?
+void DB::reconstructImageFromDB()
+{
+	// Check if the DB has an Image source
+	if (image.data == NULL)
+	{
+		std::cout << "ERROR: This DB does not have any source-Image, use 'DB(Mat img_source, int size_of_patch)' constructor instead." << std::endl;
+	}
+
+	else
+	{
+		// Initiates sizes and numbers
+		int size_of_patch = getImage(0).getImageMat().rows;
+		int nPatchesX = image.cols / size_of_patch;
+		int nPatchesY = image.rows / size_of_patch;
+
+		// Make a copy of the Source Image matrix and initiate a patch
+		Mat constructedImage(image);
+		Mat patch;
+
+		// Replace the image with desired patches
+		for (int y = 0; y < nPatchesY; y++)
+		{
+			for (int x = 0; x < nPatchesX; x++)
+			{
+				getImage(x + y*nPatchesX).getImageMat().copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)));
+			}
+		}
+
+		imshow("Reconstructed Image", constructedImage);
+		waitKey(10);
 	}
 }
 

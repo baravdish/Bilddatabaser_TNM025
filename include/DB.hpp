@@ -25,6 +25,7 @@ class DB
 		vector<Image> getImageDatabase();
 		Image getImage(int n);
 		Mat getImageMat(int n);
+		void reconstructImageFromDB(); // Construct an image from the created DB
 };
  
 #endif

@@ -23,6 +23,7 @@ int main()
 	
 	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
 	DB zlatan_DB = DB(image_temp, 32);
+	zlatan_DB.reconstructImageFromDB();
 
 	//Image a = animal_database.getImage(1);
 	//float range[] = { 0, 255 };
