@@ -21,7 +21,9 @@ int main()
 	DB animal_database = DB();
 	animal_database.loadImages(mainDirectory, animalFolder);
 	
-	
+	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	DB zlatan_DB = DB(image_temp, 32);
+
 	//Image a = animal_database.getImage(1);
 	//float range[] = { 0, 255 };
 	//animal_database.getImage(1).generateHistograms(a.getImage(), 128, range);

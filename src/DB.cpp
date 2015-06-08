@@ -6,9 +6,47 @@ DB::DB()
 
 }
 
+// Create DB from an Image
+DB::DB(Mat img_source, int size_of_patch)
+{
+	// Initiate rows, cols and Image.
+	int rows = img_source.rows;
+	int cols = img_source.cols;
+	image = img_source;
+
+	// Resize image so that it has mod(Y, size_of_patch) == 0
+	if (rows % size_of_patch != 0)
+	{
+		resize(img_source, image, Size(cols, rows - (rows % size_of_patch)), 0, 0, INTER_AREA);
+		rows = image.rows; //update rows!
+	}
+
+	// Resize image so that it has mod(X, size_of_patch) == 0
+	if (cols % size_of_patch != 0)
+	{
+		resize(img_source, image, Size(cols - (cols % size_of_patch), rows), 0, 0, INTER_AREA);
+		cols = image.cols; //update cols!
+	}
+
+	// Get the number of patches in X and Y.
+	int nPatchesX = cols / size_of_patch;
+	int nPatchesY = rows / size_of_patch; 
+	Mat patch;
+	
+	// Splices the image into patches and puts them in a DB
+	for (int y = 0; y < nPatchesY; y++)
+	{
+		for (int x = 0; x < nPatchesX; x++)
+		{
+			patch = cv::Mat(img_source, cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)); // (roiLeft, roiTop, roiWidth, roiHeight)
+			Image temp_img = Image(patch);
+			images.push_back(temp_img);
+		}
+	}
+}
+
 void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages)
 {
-	
 	for (auto p : invalidImages)
 	{
 		if (p == 0)
@@ -38,8 +76,6 @@ Mat DB::getImageMat(int n)
 {
 	return images[n].getImageMat();
 }
-
-
 
 void DB::loadImages(string directory, vector<string> folders)
 {
