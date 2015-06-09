@@ -22,9 +22,11 @@ int main()
 	DB animal_database = DB();
 	animal_database.loadImages(mainDirectory, inputFolders);
 
-	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	string image_name = "zlatan_blue_background_1920x1080.jpg";
+	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/" + image_name, 1);
 	DB zlatan_DB = DB(image_temp, 32);
-	zlatan_DB.reconstructImageFromDB(animal_database);
+
+	zlatan_DB.reconstructImageFromDB(animal_database, image_name);
 	
 	// A test for color histogram
 	/*Mat src = imread("test.png", 1)

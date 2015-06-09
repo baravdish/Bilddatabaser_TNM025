@@ -20,12 +20,12 @@ class DB
 	    DB(); // Create a new empty DB without source Image
 	    DB(Mat img_source, int size_of_patches); // Create a new DB from a source Image
 		void loadImages(string directory, vector<string> folders); // Loads images from folders
-	    void saveImage(); // Saves the desired image to desktop as JPG
+		void saveImage(Mat image, string image_name); // Saves the desired image to desktop as JPG
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
 		vector<Image> getImageDatabase(); // Returns the images vector
 		Image getImage(int n); // Returns the image object at position n in images vector
 		Mat getImageMat(int n); // Returns the mat from the image object at position n in images vector
-		void reconstructImageFromDB(DB matched_images_DB); // Construct an image from the matched DB and source image
+		void reconstructImageFromDB(DB matched_images_DB, string image_name); // Construct an image from the matched DB and source image
 };
  
 #endif

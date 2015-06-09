@@ -46,7 +46,7 @@ DB::DB(Mat img_source, int size_of_patch)
 }
 
 // TODO: Maybe send in a new DB with matched images?
-void DB::reconstructImageFromDB(DB matched_images_DB)
+void DB::reconstructImageFromDB(DB matched_images_DB, string image_name)
 {
 	// Check if the DB has an Image source
 	if (image.data == NULL)
@@ -74,7 +74,8 @@ void DB::reconstructImageFromDB(DB matched_images_DB)
 			}
 		}
 
-		imshow("Reconstructed Image", constructedImage);
+		// Save the result to the computer
+		saveImage(constructedImage, image_name);
 		waitKey(10);
 	}
 }
@@ -143,8 +144,8 @@ void DB::loadImages(string directory, vector<string> folders)
 				else
 				{
 					Image img(image_temp);
-					img.calculateCorrelationMatrixRGB(img.getImageMat());
-					img.calculateEigvalAndEigvec();
+					//img.calculateCorrelationMatrixRGB(img.getImageMat());
+					//img.calculateEigvalAndEigvec();
 					images_.push_back(img);
 					nImages++;
 				}
@@ -170,7 +171,12 @@ void DB::loadImages(string directory, vector<string> folders)
 	}
 }
 
-void DB::saveImage()
+// Saves the image to result folder
+void DB::saveImage(Mat image, string image_name)
 {
+	imwrite("../result/" + image_name, image);
 
+	cout << endl << "======================================================" << endl;
+	cout << "The reconstruced image is saved to: ../result/" + image_name << endl;
+	cout << "======================================================" << endl << endl;
 }
