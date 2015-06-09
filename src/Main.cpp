@@ -9,22 +9,27 @@ int main()
 	// Setup directory and folder paths, no recursive solution yet
 
 	// ----> Directory for: KRISTOFER <-----
-	string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
+	//string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
+	//cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+
 	// ----> Directory for: GABRIEL <-----
-
-	//string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
-
+	cv::Mat image_temp = imread("C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
+	char a;
+	if (!image_temp.data){
+		cout << "Zlatan is too big!" << endl; return -1;
+	}
+	
 	vector<string> inputFolders = { "animal2", "beach2", "cat2", "colorful2",
 								    "doll2", "elegant2", "flower2", "food2", "formal2", "garden2" };
 	vector<string> animalFolder = { "animal2" };
 
 	// Initilize the database
-	DB animal_database = DB();
-	animal_database.loadImages(mainDirectory, inputFolders);
-
-	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	DB database = DB();
+	database.loadImages(mainDirectory, inputFolders);
+	
 	DB zlatan_DB = DB(image_temp, 32);
-	zlatan_DB.reconstructImageFromDB(animal_database);
+	zlatan_DB.reconstructImageFromDB(database);
 	
 	// A test for color histogram
 	/*Mat src = imread("test.png", 1)
