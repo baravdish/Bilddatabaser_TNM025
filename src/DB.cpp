@@ -98,22 +98,22 @@ void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, 
 
 vector<Image> DB::getImageDatabase()
 {
-	return images;
+	return images_;
 }
 
 Image DB::getImage(int n)
 {
-	return images[n];
+	return images_[n];
 }
 
 Mat DB::getImageMat(int n)
 {
-	return images[n].getImageMat();
+	return images_[n].getImageMat();
 }
 
 void DB::loadImages(string directory, vector<string> folders)
 {
-	DIR *directory_path;
+	
 	struct dirent *dirp;
 	string temp = directory;
 
@@ -123,15 +123,15 @@ void DB::loadImages(string directory, vector<string> folders)
 		int nImages = 0;
 		int invImages = 0;
 		directory = temp + folders[n];
-		directory_path = opendir(directory.c_str());
+		directory_path_ = opendir(directory.c_str());
 
 		cout << "Loading images in folder: " << folders[n] << "..." << endl;
-		if (directory_path == NULL)
+		if (directory_path_ == NULL)
 			cout << "Error opening directory. Not valid." << endl;
 		else
 		{
 			string filepath;
-			while ((dirp = readdir(directory_path)))
+			while ((dirp = readdir(directory_path_)))
 			{
 				filepath = directory + "/" + dirp->d_name;
 				cv::Mat image_temp = imread(filepath, 1);
@@ -145,7 +145,7 @@ void DB::loadImages(string directory, vector<string> folders)
 					Image img(image_temp);
 					img.calculateCorrelationMatrixRGB(img.getImageMat());
 					img.calculateEigvalAndEigvec();
-					images.push_back(img);
+					images_.push_back(img);
 					nImages++;
 				}
 				invImages++;
@@ -153,18 +153,18 @@ void DB::loadImages(string directory, vector<string> folders)
 		} // END OF: image iterations
 
 		// Connect each folder name with its size
-		folderSizes[folders[n]] = nImages;
+		folderSizes_[folders[n]] = nImages;
 
 		//printInvalidImageInformation(invalidImages, folders[n], images.size());
 
-		closedir(directory_path);
+		closedir(directory_path_);
 
 	} // END OF: folder iteration
 
-	cout << endl << endl << "Total number of loaded images in the database: " << images.size() << endl;
+	cout << endl << endl << "Total number of loaded images in the database: " << images_.size() << endl;
 	
 	cout << "==============================================" << endl;
-	for (auto elem : folderSizes)
+	for (auto elem : folderSizes_)
 	{
 		std::cout << elem.first << " has " << elem.second << " images " "\n";
 	}

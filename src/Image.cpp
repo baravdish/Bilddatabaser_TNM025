@@ -4,7 +4,7 @@
 Image::Image(Mat image_src) :
 image_mat_(image_src)
 {
-	//There are no grayscaled images in current database
+	//There are no grayscaled images in the current database
 	//if (image_src.type() != 16)
 		//cvtColor(image_src, img, CV_GRAY2BGR);
 

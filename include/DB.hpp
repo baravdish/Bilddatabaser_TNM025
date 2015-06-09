@@ -15,7 +15,7 @@ class DB
 	 	vector<Image> images; // Vector containing all the image objects in this DB
 		std::map<string, int> folderSizes;
 		Mat image; // A source image. Only used with second constructor. Null if initiated without source image.
-		
+		DIR *directory_path_;
 	public:
 	    DB(); // Create a new empty DB without source Image
 	    DB(Mat img_source, int size_of_patches); // Create a new DB from a source Image
