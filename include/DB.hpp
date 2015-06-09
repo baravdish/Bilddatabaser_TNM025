@@ -12,9 +12,9 @@ using namespace cv;
 class DB
 {
 	private:
-	 	vector<Image> images;
-		std::map<string, int> folderSizes;
-		
+	 	vector<Image> images_;
+		std::map<string, int> folderSizes_;
+		DIR *directory_path_;
 	public:
 	    DB();
 		void loadImages(string directory, vector<string> folders);
