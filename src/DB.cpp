@@ -70,7 +70,7 @@ void DB::reconstructImageFromDB(DB matched_images_DB)
 		{
 			for (int x = 0; x < nPatchesX; x++)
 			{
-				matched_images_DB.getImageMat(x + y*nPatchesX).copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)));
+				matched_images_DB.getImageMat(x + y*nPatchesX).copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch))); // (roiLeft, roiTop, roiWidth, roiHeight)
 			}
 		}
 
