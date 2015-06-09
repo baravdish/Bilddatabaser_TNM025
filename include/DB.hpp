@@ -12,8 +12,8 @@ using namespace cv;
 class DB
 {
 	private:
-	 	vector<Image> images; // Vector containing all the image objects in this DB
-		std::map<string, int> folderSizes;
+	 	vector<Image> images_; // Vector containing all the image objects in this DB
+		std::map<string, int> folderSizes_;
 		Mat image; // A source image. Only used with second constructor. Null if initiated without source image.
 		DIR *directory_path_;
 	public:

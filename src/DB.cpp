@@ -40,7 +40,7 @@ DB::DB(Mat img_source, int size_of_patch)
 		{
 			patch = cv::Mat(img_source, cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)); // (roiLeft, roiTop, roiWidth, roiHeight)
 			Image temp_img = Image(patch);
-			images.push_back(temp_img);
+			images_.push_back(temp_img);
 		}
 	}
 }

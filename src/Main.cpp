@@ -12,7 +12,7 @@ int main()
 	string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
 	// ----> Directory for: GABRIEL <-----
 
-	string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
+	//string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
 
 	vector<string> inputFolders = { "animal2", "beach2", "cat2", "colorful2",
 								    "doll2", "elegant2", "flower2", "food2", "formal2", "garden2" };
@@ -22,8 +22,6 @@ int main()
 	DB animal_database = DB();
 	animal_database.loadImages(mainDirectory, inputFolders);
 
-	
-	
 	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
 	DB zlatan_DB = DB(image_temp, 32);
 	zlatan_DB.reconstructImageFromDB(animal_database);
