@@ -1,9 +1,82 @@
-#include "DB.hpp"
+﻿#include "DB.hpp"
 
 // Constructor
 DB::DB()
 {
+	image.data = NULL;
+}
 
+// Create DB from an Image
+DB::DB(Mat img_source, int size_of_patch)
+{
+	// Initiate rows, cols and Image.
+	int rows = img_source.rows;
+	int cols = img_source.cols;
+	image = img_source;
+
+	// Resize image so that it has mod(Y, size_of_patch) == 0
+	if (rows % size_of_patch != 0)
+	{
+		resize(img_source, image, Size(cols, rows - (rows % size_of_patch)), 0, 0, INTER_AREA);
+		rows = image.rows; //update rows!
+	}
+
+	// Resize image so that it has mod(X, size_of_patch) == 0
+	if (cols % size_of_patch != 0)
+	{
+		resize(img_source, image, Size(cols - (cols % size_of_patch), rows), 0, 0, INTER_AREA);
+		cols = image.cols; //update cols!
+	}
+
+	// Get the number of patches in X and Y.
+	int nPatchesX = cols / size_of_patch;
+	int nPatchesY = rows / size_of_patch; 
+	Mat patch;
+	
+	// Splices the image into patches and puts them in a DB
+	for (int y = 0; y < nPatchesY; y++)
+	{
+		for (int x = 0; x < nPatchesX; x++)
+		{
+			patch = cv::Mat(img_source, cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)); // (roiLeft, roiTop, roiWidth, roiHeight)
+			Image temp_img = Image(patch);
+			images.push_back(temp_img);
+		}
+	}
+}
+
+// TODO: Maybe send in a new DB with matched images?
+void DB::reconstructImageFromDB(DB matched_images_DB)
+{
+	// Check if the DB has an Image source
+	if (image.data == NULL)
+	{
+		std::cout << "ERROR: This DB does not have any source-Image, use 'DB(Mat img_source, int size_of_patch)' constructor instead." << std::endl;
+	}
+
+	else
+	{
+		// Initiates sizes and numbers
+		int size_of_patch = getImage(0).getImageMat().rows;
+		int nPatchesX = image.cols / size_of_patch;
+		int nPatchesY = image.rows / size_of_patch;
+
+		// Make a copy of the Source Image matrix and initiate a patch
+		Mat constructedImage(image);
+		Mat patch;
+
+		// Replace the image with desired patches
+		for (int y = 0; y < nPatchesY; y++)
+		{
+			for (int x = 0; x < nPatchesX; x++)
+			{
+				matched_images_DB.getImageMat(x + y*nPatchesX).copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch)));
+			}
+		}
+
+		imshow("Reconstructed Image", constructedImage);
+		waitKey(10);
+	}
 }
 
 void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages)
@@ -97,7 +170,7 @@ void DB::loadImages(string directory, vector<string> folders)
 	}
 }
 
-void DB::saveImages()
+void DB::saveImage()
 {
 
 }

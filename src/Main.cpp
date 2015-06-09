@@ -22,10 +22,14 @@ int main()
 	DB animal_database = DB();
 	animal_database.loadImages(mainDirectory, animalFolder);
 
-	// A test for color histogram
 	
-	/*Mat src = imread("test.png", 1);
-
+	
+	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	DB zlatan_DB = DB(image_temp, 32);
+	zlatan_DB.reconstructImageFromDB(zlatan_DB);
+	
+	// A test for color histogram
+	/*Mat src = imread("test.png", 1)
 	cout << "Total: " << src.total() << endl;
 
 	int r_bins = 2;

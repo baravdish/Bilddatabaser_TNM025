@@ -4,12 +4,7 @@
 #include <vector>
 #include <opencv2\opencv.hpp>
 
-using std::cout;
-using std::cin;
-using std::endl;
-using std::vector;
-using std::string;
-
+using namespace std;
 using namespace cv;
 
 class Image

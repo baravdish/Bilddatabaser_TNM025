@@ -9,7 +9,7 @@ image_mat_(image_src)
 		//cvtColor(image_src, img, CV_GRAY2BGR);
 
 	// Convert to double
-	image_mat_.convertTo(image_mat_, CV_64FC3);
+	//image_mat_.convertTo(image_mat_, CV_64FC3);
 }
 
 Mat Image::getImageMat()
