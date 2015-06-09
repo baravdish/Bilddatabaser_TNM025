@@ -125,7 +125,7 @@ void DB::loadImages(string directory, vector<string> folders)
 		int invImages = 0;
 		directory = temp + folders[n];
 		directory_path_ = opendir(directory.c_str());
-
+		
 		cout << "Loading images in folder: " << folders[n] << "..." << endl;
 		if (directory_path_ == NULL)
 			cout << "Error opening directory. Not valid." << endl;
@@ -135,10 +135,11 @@ void DB::loadImages(string directory, vector<string> folders)
 			while ((dirp = readdir(directory_path_)))
 			{
 				filepath = directory + "/" + dirp->d_name;
+				
 				cv::Mat image_temp = imread(filepath, 1);
 				if (!image_temp.data)
 				{
-					//cout << "Could not read data" << endl;
+					//cout << "Could not read data in " << filepath << endl;
 					invalidImages.push_back(invImages);
 				}
 				else
@@ -149,6 +150,7 @@ void DB::loadImages(string directory, vector<string> folders)
 					images_.push_back(img);
 					nImages++;
 				}
+
 				invImages++;
 			}
 		} // END OF: image iterations
@@ -161,7 +163,6 @@ void DB::loadImages(string directory, vector<string> folders)
 		closedir(directory_path_);
 
 	} // END OF: folder iteration
-
 	cout << endl << endl << "Total number of loaded images in the database: " << images_.size() << endl;
 	
 	cout << "==============================================" << endl;
