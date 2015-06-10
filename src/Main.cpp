@@ -17,7 +17,6 @@ int main()
 	//string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
 	//cv::Mat image_temp = imread("C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/zlatan/" + image_name, 1);
 
-
 	if (!image_temp.data){
 		cout << "Zlatan is too big!" << endl; return -1;
 	}
