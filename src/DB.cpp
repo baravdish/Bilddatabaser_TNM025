@@ -96,7 +96,7 @@ void DB::loadImages(string directory, vector<string> folders)
 	}
 
 	// TODO: Activate when working.
-	// initializeMatrices();
+	 initializeMatrices();
 }
 
 int DB::getNImages()
@@ -110,10 +110,10 @@ void DB::initializeMatrices()
 	setHistogramMatrix(images_);
 
 	// Initiate the C (nBin^3 x nBin^3)
-	setCorrelationMatrix(histogramMatrix);
+	//setCorrelationMatrix(histogramMatrix);
 
 	// Initiate the PCA (nImages x nEigenVectors)
-	setEigenVectors(correlationMatrix);
+	setEigenVectors(histogramMatrix);
 
 	// Initiate the HE (nImages x nBin^3) * (nBin^3 x nEigvectors)
 	setHistoEig(histogramMatrix, eigenVectors);
@@ -122,11 +122,15 @@ void DB::initializeMatrices()
 void DB::setHistogramMatrix(vector<Image> imageMatrices)
 {
 	// H - A matrix of size (nImages x nBin^3)
-	Mat H(nImages, N_BIN^3, CV_32F, Scalar(0.0));
+	Mat H(pow(BIN_SIZE, 3), nImages, CV_32F, Scalar(0.0));
 
-	// TODO: Copy images histogram to H with copyTo
+	for (int i = 0; i < nImages; i++)
+	{	
+		Mat h(imageMatrices[i].getHistogram());
+		h.copyTo(H(Rect(i, 0, 1, pow(BIN_SIZE, 3))));
+	}
 
-	histogramMatrix = H;
+	histogramMatrix = H.t();
 }
 
 Mat DB::getHistogramMatrix()
@@ -145,14 +149,29 @@ Mat DB::getCorrelationMatrix()
 	return correlationMatrix;
 }
 
-void DB::setEigenVectors(Mat C)
+void DB::setEigenVectors(Mat H)
 {
 	// Perform PCA
-	PCA pca = PCA(C, noArray(), CV_PCA_DATA_AS_ROW, N_EIGENVECTORS);
+
+	PCA pca = PCA(H, Mat(), CV_PCA_DATA_AS_ROW, N_EIGENVECTORS);
 
 	// E - A matrix of size (nBin^3 x nImages)
 	// Get the best eigenvectors and save them
 	eigenVectors = pca.eigenvectors;
+	cout << eigenVectors << endl;
+
+	for (int i = 0; i < N_EIGENVECTORS; i++)
+	{
+		Mat eigTemp;
+		eigenVectors(Rect(i, 0, pow(BIN_SIZE, 3), 1)).copyTo(eigTemp);
+		//cout << eigenVectors;
+		normalize(eigTemp, eigTemp);
+		
+		char a;
+		cin >> a;
+		eigTemp.copyTo(eigenVectors(Rect(i, 0, pow(BIN_SIZE, 3), 1)));
+	}
+	
 }
 
 Mat DB::getEigenVectors()
@@ -164,7 +183,12 @@ void DB::setHistoEig(Mat H, Mat E)
 {
 	// H - A matrix of size (nImages x nBin^3)
 	// E - A matrix of size (nBin^3 x nEigvectors)
-	histoEig = H * E;
+	cout << "SIZE OF H: " << H.t().size() << endl;
+	cout << "SIZE OF E: " << E.size() << endl;
+
+	histoEig = E*H.t();
+	cout << histoEig.size() << endl;
+	cout << histoEig << endl;
 }
 
 Mat DB::getHistoEig()

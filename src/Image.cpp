@@ -4,19 +4,13 @@
 Image::Image(Mat image_src) :
 image_mat_(image_src)
 {
-	//There are no grayscaled images in the current database
-	//if (image_src.type() != 16)
-		//cvtColor(image_src, img, CV_GRAY2BGR);
-
-	// Convert to double
-	//image_mat_.convertTo(image_mat_, CV_64FC3);
-
 	// Initiate RGB and HSV for this image
 	setRGB(image_src);
 	setHSV(image_src);
 
 	// Set the histogram of this Image
-	setHistogram(image_src, BIN_SIZE);
+
+	setHistogram(image_src);
 }
 
 Mat Image::getImageMat()
@@ -24,17 +18,33 @@ Mat Image::getImageMat()
 	return image_mat_;
 }
 
-// TODO: Calculate histogram of this image
-void Image::setHistogram(Mat image_src, int bin_size)
+// Calculate histogram for an image
+void Image::setHistogram(Mat image_src)
 {
-	//vector<Mat> bgr_planes;
-	//split(image_src, bgr_planes);
-	//const float* histRange = { range };
-	//Save to 1x64 histogram
-	// ============> TODO: Do we need to normalize this? <=============
-	//calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist_, 1, &hist_size, &histRange, true, false);
-	//calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist_, 1, &hist_size, &histRange, true, false);
-	//calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist_, 1, &hist_size, &histRange, true, false);
+	int histSize[3] = { BIN_SIZE, BIN_SIZE, BIN_SIZE };
+	const float hranges[2] = { 0.0, 256.0 };
+	const float* ranges[3] = { hranges, hranges, hranges };
+	int channels[3] = { 0, 1, 2 };
+
+	calcHist(&image_src, 1, channels, Mat(), histogram, 3, histSize, ranges, true, false);
+
+	histogram = histogram / image_src.total();
+
+	vector<float> histogramVec(pow(BIN_SIZE, 3));
+
+	int count = 0;
+	// TODO: Check if the program is slow, if so; check this piece
+	for (int i = 0; i < BIN_SIZE; i++) {
+		for (int j = 0; j < BIN_SIZE; j++) {
+			for (int k = 0; k < BIN_SIZE; k++) {
+				histogramVec[count] = histogram.at<float>(i, j, k);
+				count++;
+			}
+		}
+	}
+
+	Mat temp(histogramVec);
+	histogram = temp;
 }
 
 Mat Image::getHistogram()

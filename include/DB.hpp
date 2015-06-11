@@ -13,7 +13,7 @@ class DB
 {
 	private:
 		const int N_EIGENVECTORS = 5;
-		const int N_BIN = 4; // (4x4x4)
+		const int BIN_SIZE = 4; // (4x4x4)
 
 	 	vector<Image> images_; // Vector containing all the image objects in this DB
 		std::map<string, int> folderSizes_;
@@ -36,7 +36,7 @@ class DB
 		// Set functions
 		void setHistogramMatrix(vector<Image> imageMatrices); // sets the histogram matrix
 		void setCorrelationMatrix(Mat H); // sets the correlation matrix
-		void setEigenVectors(Mat C); // sets the eigenvectors
+		void setEigenVectors(Mat H); // sets the eigenvectors
 		void setHistoEig(Mat H, Mat E); // sets the PCA
 		void pushBack(Image I); // Pushes a image to the vector
 		

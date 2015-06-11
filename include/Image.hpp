@@ -10,11 +10,9 @@ using namespace cv;
 class Image
 {
 	private:
-		const int BIN_SIZE = 8; // The size of bins
-
+		const int BIN_SIZE = 4; // The size of bins
 		Mat pixel_values_mat_RGB_; // A mat containing all the RGB values of that image in a Nx3 matrix
 		Mat pixel_values_mat_IC2_; // ^... but for IC2
-		Mat b_hist_, g_hist_, r_hist_;
 		Mat histogram;
 		Mat image_mat_; // This is image_src.
 
@@ -25,7 +23,7 @@ class Image
 		// Set functions
 		void setRGB(Mat image_src);
 		void setHSV(Mat image_src);
-		void setHistogram(Mat image_src, int hist_size);
+		void setHistogram(Mat image_src);
 
 		// Get functions
 		Mat getImageMat();
