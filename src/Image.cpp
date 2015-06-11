@@ -30,7 +30,7 @@ void Image::setHistogram(Mat image_src, int bin_size)
 	//vector<Mat> bgr_planes;
 	//split(image_src, bgr_planes);
 	//const float* histRange = { range };
-
+	//Save to 1x64 histogram
 	// ============> TODO: Do we need to normalize this? <=============
 	//calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist_, 1, &hist_size, &histRange, true, false);
 	//calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist_, 1, &hist_size, &histRange, true, false);
