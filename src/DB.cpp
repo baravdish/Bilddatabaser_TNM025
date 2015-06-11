@@ -94,12 +94,30 @@ void DB::loadImages(string directory, vector<string> folders)
 	{
 		std::cout << elem.first << " has " << elem.second << " images " "\n";
 	}
+
+	// TODO: Activate when working.
+	// initializeMatrices();
 }
 
 // TODO: Check that this works correctly in both LoadImages and Zlatan!
 int DB::getNImages()
 {
 	return nImages;
+}
+
+void DB::initializeMatrices()
+{
+	// Initiate the H (nImages x nBin^3)
+	setHistogramMatrix(images_);
+
+	// Initiate the C (nBin^3 x nBin^3)
+	setCorrelationMatrix(histogramMatrix);
+
+	// Initiate the PCA (nImages x nEigenVectors)
+	setEigenVectors(correlationMatrix);
+
+	// Initiate the HE (nImages x nBin^3) * (nBin^3 x nEigvectors)
+	setHistoEig(histogramMatrix, eigenVectors);
 }
 
 void DB::setHistogramMatrix(vector<Image> imageMatrices)

@@ -31,6 +31,7 @@ class DB
 		// Image to DB initialization
 		void loadImages(string directory, vector<string> folders); // Loads images from folders
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
+		void initializeMatrices(); // Initializes all the matrices in this DB - corr, eig, hist...
 
 		// Set functions
 		void setHistogramMatrix(vector<Image> imageMatrices); // sets the histogram matrix

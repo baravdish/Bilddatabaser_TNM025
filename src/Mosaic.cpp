@@ -47,6 +47,9 @@ void Mosaic::setImagesDB()
 			imagesDB.pushBack(temp_img);
 		}
 	}
+
+	// TODO: Activate when working.
+	// imagesDB.initializeMatrices();
 }
 
 // TODO: Maybe send in a vector with matched images instead of DB?
