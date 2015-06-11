@@ -12,7 +12,7 @@ using namespace cv;
 class Mosaic
 {
 private:
-	const int SIZE_OF_PATCH = 32; // (32x32 large patches)
+	int SIZE_OF_PATCH = 32; // (32x32 large patches)
 	Mat image_source; // This image source
 	Mat image_result; // The mosaic
 
@@ -33,10 +33,11 @@ public:
 	void pushSimilarImage(Mat similarImage); // Push back the similar image to similar image vector
 
 	// Set functions
-	void reconstructImageFromDB(DB matched_images_DB, string image_name); // Construct an image from the matched DB and source image
+	void reconstructImageFromDB(DB matched_images_DB); // Construct an image from the matched DB and source image
 
 	// Get functions
 	Mat getImageSource();
+	DB getImagesDB();
 
 };
 

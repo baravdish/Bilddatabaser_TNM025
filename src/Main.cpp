@@ -30,8 +30,9 @@ int main()
 	DB database = DB();
 	database.loadImages(mainDirectory, inputFolders);
 	
-	//DB zlatan_DB = DB(image_temp, 32);
-	//zlatan_DB.reconstructImageFromDB(zlatan_DB, image_name);
+	Mosaic zlatan = Mosaic(image_temp);
+	zlatan.reconstructImageFromDB(database);
+	zlatan.saveImage(image_name);
 	
 	// A test for color histogram
 	/*Mat src = imread("test.png", 1)

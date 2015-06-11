@@ -51,7 +51,7 @@ void Mosaic::setImagesDB()
 
 // TODO: Maybe send in a new DB with matched images?
 // TODO: Fix so that the reconstruced image is saved on this class and not replacing source image.
-void Mosaic::reconstructImageFromDB(DB matched_images_DB, string image_name)
+void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 {
 	// Initiates sizes and numbers
 	int size_of_patch = imagesDB.getImage(0).getImageMat().rows;
@@ -90,6 +90,11 @@ Mat Mosaic::similiarImagePCA(Mat histogram, Mat queryImage)
 void Mosaic::pushSimilarImage(Mat similarImage)
 {
 	// TODO: Push back the similar image to the vector
+}
+
+DB Mosaic::getImagesDB()
+{
+	return imagesDB;
 }
 
 // Saves the image to result folder
