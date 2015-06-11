@@ -99,7 +99,6 @@ void DB::loadImages(string directory, vector<string> folders)
 	// initializeMatrices();
 }
 
-// TODO: Check that this works correctly in both LoadImages and Zlatan!
 int DB::getNImages()
 {
 	return nImages;
