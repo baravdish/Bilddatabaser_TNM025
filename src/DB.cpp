@@ -147,7 +147,12 @@ Mat DB::getCorrelationMatrix()
 
 void DB::setEigenVectors(Mat C)
 {
-	// TODO: A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
+	// Perform PCA
+	PCA pca = PCA(C, noArray(), CV_PCA_DATA_AS_ROW, N_EIGENVECTORS);
+
+	// E - A matrix of size (nBin^3 x nImages)
+	// Get the best eigenvectors and save them
+	eigenVectors = pca.eigenvectors;
 }
 
 Mat DB::getEigenVectors()
