@@ -1,12 +1,12 @@
 ﻿#include "DB.hpp"
 
 // Constructor
-DB::DB()
+DB::DB() 
 {
-	image.data = NULL;
+	nImages = 0;
 }
 
-void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages)
+void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nr_of_Images)
 {
 	for (auto p : invalidImages)
 	{
@@ -40,14 +40,13 @@ Mat DB::getImageMat(int n)
 
 void DB::loadImages(string directory, vector<string> folders)
 {
-	
 	struct dirent *dirp;
 	string temp = directory;
 
 	for (size_t n = 0; n < folders.size(); n++)
 	{
 		vector<int> invalidImages;
-		int nImages = 0;
+		int nr_of_Images = 0;
 		int invImages = 0;
 		directory = temp + folders[n];
 		directory_path_ = opendir(directory.c_str());
@@ -73,8 +72,8 @@ void DB::loadImages(string directory, vector<string> folders)
 					Image img(image_temp);
 					//img.calculateCorrelationMatrixRGB(img.getImageMat());
 					//img.calculateEigvalAndEigvec();
-					images_.push_back(img);
-					nImages++;
+					pushBack(img);
+					nr_of_Images++;
 				}
 
 				invImages++;
@@ -82,10 +81,9 @@ void DB::loadImages(string directory, vector<string> folders)
 		} // END OF: image iterations
 
 		// Connect each folder name with its size
-		folderSizes_[folders[n]] = nImages;
+		folderSizes_[folders[n]] = nr_of_Images;
 
 		//printInvalidImageInformation(invalidImages, folders[n], images.size());
-
 		closedir(directory_path_);
 
 	} // END OF: folder iteration
@@ -96,17 +94,39 @@ void DB::loadImages(string directory, vector<string> folders)
 	{
 		std::cout << elem.first << " has " << elem.second << " images " "\n";
 	}
+
+	// TODO: Activate when working.
+	// initializeMatrices();
 }
 
-// TODO: Check that this works correctly in both LoadImages and Zlatan!
 int DB::getNImages()
 {
 	return nImages;
 }
 
+void DB::initializeMatrices()
+{
+	// Initiate the H (nImages x nBin^3)
+	setHistogramMatrix(images_);
+
+	// Initiate the C (nBin^3 x nBin^3)
+	setCorrelationMatrix(histogramMatrix);
+
+	// Initiate the PCA (nImages x nEigenVectors)
+	setEigenVectors(correlationMatrix);
+
+	// Initiate the HE (nImages x nBin^3) * (nBin^3 x nEigvectors)
+	setHistoEig(histogramMatrix, eigenVectors);
+}
+
 void DB::setHistogramMatrix(vector<Image> imageMatrices)
 {
-	// TODO: A matrix of size (nImages x nBin^3)
+	// H - A matrix of size (nImages x nBin^3)
+	Mat H(nImages, N_BIN^3, CV_32F, Scalar(0.0));
+
+	// TODO: Copy images histogram to H with copyTo
+
+	histogramMatrix = H;
 }
 
 Mat DB::getHistogramMatrix()
@@ -114,9 +134,10 @@ Mat DB::getHistogramMatrix()
 	return histogramMatrix;
 }
 
-void DB::setCorrelationMatrix(Mat histogram)
+void DB::setCorrelationMatrix(Mat H)
 {
-	// TODO: A matrix of size (nBin^3 x nBin^3)
+	// H - A matrix of size (nImages x nBin^3)
+	correlationMatrix = H.t() * H;
 }
 
 Mat DB::getCorrelationMatrix()
@@ -126,7 +147,12 @@ Mat DB::getCorrelationMatrix()
 
 void DB::setEigenVectors(Mat C)
 {
-	// TODO: // A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
+	// Perform PCA
+	PCA pca = PCA(C, noArray(), CV_PCA_DATA_AS_ROW, N_EIGENVECTORS);
+
+	// E - A matrix of size (nBin^3 x nImages)
+	// Get the best eigenvectors and save them
+	eigenVectors = pca.eigenvectors;
 }
 
 Mat DB::getEigenVectors()
@@ -134,22 +160,20 @@ Mat DB::getEigenVectors()
 	return eigenVectors;
 }
 
-void DB::setPCA(Mat E)
+void DB::setHistoEig(Mat H, Mat E)
 {
-	// TODO: A matrix of size (nImages x nEigenVectors)
+	// H - A matrix of size (nImages x nBin^3)
+	// E - A matrix of size (nBin^3 x nEigvectors)
+	histoEig = H * E;
 }
 
-Mat DB::getPCA()
+Mat DB::getHistoEig()
 {
-	return PCA;
-}
-
-vector<Image> DB::getSimilarImages()
-{
-	return similar_images;
+	return histoEig;
 }
 
 void DB::pushBack(Image I)
 {
 	images_.push_back(I);
+	nImages++;
 }

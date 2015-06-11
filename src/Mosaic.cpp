@@ -47,10 +47,12 @@ void Mosaic::setImagesDB()
 			imagesDB.pushBack(temp_img);
 		}
 	}
+
+	// TODO: Activate when working.
+	// imagesDB.initializeMatrices();
 }
 
-// TODO: Maybe send in a new DB with matched images?
-// TODO: Fix so that the reconstruced image is saved on this class and not replacing source image.
+// TODO: Maybe send in a vector with matched images instead of DB?
 void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 {
 	// Initiates sizes and numbers
@@ -75,21 +77,16 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 	image_result = constructedImage;
 }
 
-Mat Mosaic::queryImageHistogram(Mat histogram, int index)
-{
-	// TODO: Get histogram for query image, maybe call on function from Image class...
-	return histogram;
-}
-
 Mat Mosaic::similiarImagePCA(Mat histogram, Mat queryImage)
 {
 	// TODO: Get the similar image
 	return histogram;
 }
 
-void Mosaic::pushSimilarImage(Mat similarImage)
+void Mosaic::pushSimilarImage(Image similarImage)
 {
 	// TODO: Push back the similar image to the vector
+	similar_image.push_back(similarImage);
 }
 
 DB Mosaic::getImagesDB()
