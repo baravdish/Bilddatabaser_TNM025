@@ -13,6 +13,7 @@ class DB
 {
 	private:
 		const int N_EIGENVECTORS = 5;
+		const int N_BIN = 4; // (4x4x4)
 
 	 	vector<Image> images_; // Vector containing all the image objects in this DB
 		std::map<string, int> folderSizes_;
@@ -20,7 +21,7 @@ class DB
 		Mat histogramMatrix; // A matrix of size (nImages x nBin^3)
 		Mat correlationMatrix; // A matrix of size (nBin^3 x nBin^3)
 		Mat eigenVectors; // A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
-		Mat HistoEig; // A matrix of size (nImages x nEigenVectors)
+		Mat histoEig; // A matrix of size (nImages x nEigenVectors)
 		DIR *directory_path_;
 
 	public:

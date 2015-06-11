@@ -1,9 +1,12 @@
 ﻿#include "DB.hpp"
 
 // Constructor
-DB::DB() {}
+DB::DB() 
+{
+	nImages = 0;
+}
 
-void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages)
+void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nr_of_Images)
 {
 	for (auto p : invalidImages)
 	{
@@ -43,7 +46,7 @@ void DB::loadImages(string directory, vector<string> folders)
 	for (size_t n = 0; n < folders.size(); n++)
 	{
 		vector<int> invalidImages;
-		int nImages = 0;
+		int nr_of_Images = 0;
 		int invImages = 0;
 		directory = temp + folders[n];
 		directory_path_ = opendir(directory.c_str());
@@ -70,7 +73,7 @@ void DB::loadImages(string directory, vector<string> folders)
 					//img.calculateCorrelationMatrixRGB(img.getImageMat());
 					//img.calculateEigvalAndEigvec();
 					pushBack(img);
-					nImages++;
+					nr_of_Images++;
 				}
 
 				invImages++;
@@ -78,7 +81,7 @@ void DB::loadImages(string directory, vector<string> folders)
 		} // END OF: image iterations
 
 		// Connect each folder name with its size
-		folderSizes_[folders[n]] = nImages;
+		folderSizes_[folders[n]] = nr_of_Images;
 
 		//printInvalidImageInformation(invalidImages, folders[n], images.size());
 		closedir(directory_path_);
@@ -101,7 +104,12 @@ int DB::getNImages()
 
 void DB::setHistogramMatrix(vector<Image> imageMatrices)
 {
-	// TODO: A matrix of size (nImages x nBin^3)
+	// H - A matrix of size (nImages x nBin^3)
+	Mat H(nImages, N_BIN^3, CV_32F, Scalar(0.0));
+
+	// TODO: Copy images histogram to H with copyTo
+
+	histogramMatrix = H;
 }
 
 Mat DB::getHistogramMatrix()
@@ -122,7 +130,7 @@ Mat DB::getCorrelationMatrix()
 
 void DB::setEigenVectors(Mat C)
 {
-	// TODO: // A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
+	// TODO: A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
 }
 
 Mat DB::getEigenVectors()
@@ -144,6 +152,6 @@ Mat DB::getHistoEig()
 
 void DB::pushBack(Image I)
 {
-	// TODO: take histogram of image and copyTo Histogram-matrix
 	images_.push_back(I);
+	nImages++;
 }
