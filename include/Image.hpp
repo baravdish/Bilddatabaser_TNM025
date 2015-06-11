@@ -10,25 +10,31 @@ using namespace cv;
 class Image
 {
 	private:
+		const int BIN_SIZE = 8; // The size of bins
+
 		Mat pixel_values_mat_RGB_; // A mat containing all the RGB values of that image in a Nx3 matrix
 		Mat pixel_values_mat_IC2_; // ^... but for IC2
 		Mat b_hist_, g_hist_, r_hist_;
-		Mat histogram_IC2_;
-		Mat correlation_matrix_RGB_;
-		Mat correlation_matrix_IC2_;
-		Mat eigenvectors_;
-		Mat eigenvalues_;
+		Mat histogram;
 		Mat image_mat_; // This is image_src.
+
 	public:
-		
+		// Constructor
 	    Image(Mat image_src); // Constructor, image matrix needed
-		Mat getEigenvalues();
-		Mat getEigenvectors();
-		Mat getCorrelationMatrixRGB();
+
+		// Set functions
+		void setRGB(Mat image_src);
+		void setHSV(Mat image_src);
+		void setHistogram(Mat image_src, int hist_size);
+
+		// Get functions
 		Mat getImageMat();
-		void calculateCorrelationMatrixRGB(Mat RGB_pixels);
-		void calculateHistograms(Mat image_src, int hist_size, float range[]);
-		void calculateEigvalAndEigvec();
+		Mat getHistogram();
+		Mat getRGB();
+		Mat getHSV();
+		
+		// Trace
+		void show(); // Imshow the image
 		void print(); // Prints the pixel values of this image and imshow the image
 		void print(int x, int y); // Prints the pixel value (RGB/IC2) in specific pixel
 };

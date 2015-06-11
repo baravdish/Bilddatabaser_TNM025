@@ -10,6 +10,13 @@ image_mat_(image_src)
 
 	// Convert to double
 	//image_mat_.convertTo(image_mat_, CV_64FC3);
+
+	// Initiate RGB and HSV for this image
+	setRGB(image_src);
+	setHSV(image_src);
+
+	// Set the histogram of this Image
+	setHistogram(image_src, BIN_SIZE);
 }
 
 Mat Image::getImageMat()
@@ -17,65 +24,56 @@ Mat Image::getImageMat()
 	return image_mat_;
 }
 
-void Image::calculateCorrelationMatrixRGB(Mat image_src)
+// TODO: Calculate histogram of this image
+void Image::setHistogram(Mat image_src, int bin_size)
 {
-	// Reshape matrix to 3xN
-	// TODO: Test this!! should be 3xN * Nx3 =====> check if pixel_values_mat_RGB is 3xN!!!
-	pixel_values_mat_RGB_ = image_src.reshape(1, 3).t();
-	correlation_matrix_RGB_ = pixel_values_mat_RGB_.t()*pixel_values_mat_RGB_;
-}
-
-// Return correlation matrix for this image
-Mat Image::getCorrelationMatrixRGB()
-{
-	return correlation_matrix_RGB_;
-}
-
-// Return eigenvalues
-Mat Image::getEigenvalues()
-{
-	return eigenvalues_;
-}
-
-// Return eigenvectors
-Mat Image::getEigenvectors()
-{
-	return eigenvectors_;
-}
-
-void Image::calculateEigvalAndEigvec()
-{
-	if (!correlation_matrix_RGB_.data)
-		cout << "Error calculateEigvalAndEigvec()! Correlation matrix is undefined";
-	else
-		eigen(correlation_matrix_RGB_, eigenvalues_, eigenvectors_);
-}
-
-// Calculate histogram
-void Image::calculateHistograms(Mat image_src, int hist_size, float range[])
-{
-	vector<Mat> bgr_planes;
-	split(image_src, bgr_planes);
-	const float* histRange = { range };
+	//vector<Mat> bgr_planes;
+	//split(image_src, bgr_planes);
+	//const float* histRange = { range };
 
 	// ============> TODO: Do we need to normalize this? <=============
-	calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist_, 1, &hist_size, &histRange, true, false);
-	calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist_, 1, &hist_size, &histRange, true, false);
-	calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist_, 1, &hist_size, &histRange, true, false);
+	//calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist_, 1, &hist_size, &histRange, true, false);
+	//calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist_, 1, &hist_size, &histRange, true, false);
+	//calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist_, 1, &hist_size, &histRange, true, false);
 }
 
-// Prints the pixel values of this image and imshow the image
-void Image::print()
+Mat Image::getHistogram()
 {
-	// Show the image
-	if (!image_mat_.data)        // Check for invalid input
+	return histogram;
+}
+
+void Image::setRGB(Mat image_src)
+{
+	// TODO: set the RGB values of this image
+}
+
+Mat Image::getRGB()
+{
+	return pixel_values_mat_RGB_;
+}
+
+void Image::setHSV(Mat image_src)
+{
+	// TODO: set the HSV values of this image
+}
+
+Mat Image::getHSV()
+{
+	return pixel_values_mat_IC2_;
+}
+
+void Image::show()
+{
+	if (!image_mat_.data)
 	{
 		std::cout << "Could not open or find the image" << std::endl;
 	}
 	cv::imshow("Image", image_mat_);
 	cv::waitKey(10);
+}
 
-	// Print the matrix
+void Image::print()
+{
 	for (int i = 0; i < image_mat_.rows; i++)
 	{
 		for (int j = 0; j < image_mat_.cols; j++)

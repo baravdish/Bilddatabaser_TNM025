@@ -46,7 +46,8 @@ DB::DB(Mat img_source, int size_of_patch)
 }
 
 // TODO: Maybe send in a new DB with matched images?
-void DB::reconstructImageFromDB(DB matched_images_DB)
+// TODO: Fix so that the reconstruced image is saved on this class and not replacing source image.
+void DB::reconstructImageFromDB(DB matched_images_DB, string image_name)
 {
 	// Check if the DB has an Image source
 	if (image.data == NULL)
@@ -74,7 +75,8 @@ void DB::reconstructImageFromDB(DB matched_images_DB)
 			}
 		}
 
-		imshow("Reconstructed Image", constructedImage);
+		// Save the result to the computer
+		saveImage(constructedImage, image_name);
 		waitKey(10);
 	}
 }
@@ -171,7 +173,80 @@ void DB::loadImages(string directory, vector<string> folders)
 	}
 }
 
-void DB::saveImage()
+// TODO: Check that this works correctly in both LoadImages and Zlatan!
+int DB::getNImages()
 {
+	return nImages;
+}
 
+void DB::setHistogramMatrix(vector<Image> imageMatrices)
+{
+	// TODO: A matrix of size (nImages x nBin^3)
+}
+
+Mat DB::getHistogramMatrix()
+{
+	return histogramMatrix;
+}
+
+void DB::setCorrelationMatrix(Mat histogram)
+{
+	// TODO: A matrix of size (nBin^3 x nBin^3)
+}
+
+Mat DB::getCorrelationMatrix()
+{
+	return correlationMatrix;
+}
+
+void DB::setEigenVectors(Mat C)
+{
+	// TODO: // A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
+}
+
+Mat DB::getEigenVectors()
+{
+	return eigenVectors;
+}
+
+void DB::setPCA(Mat E)
+{
+	// TODO: A matrix of size (nImages x nEigenVectors)
+}
+
+Mat DB::getPCA()
+{
+	return PCA;
+}
+
+vector<Image> DB::getSimilarImages()
+{
+	return similar_images;
+}
+
+Mat DB::queryImageHistogram(Mat histogram, int index)
+{
+	// TODO: Get histogram for query image, maybe call on function from Image class...
+	return histogram;
+}
+
+Mat DB::similiarImagePCA(Mat histogram, Mat queryImage)
+{
+	// TODO: Get the similar image
+	return histogram;
+}
+
+void saveSimilarImage(Mat similarImage)
+{
+	// TODO: Push back the similar image to the vector
+}
+
+// Saves the image to result folder
+void DB::saveImage(Mat image, string image_name)
+{
+	imwrite("../result/" + image_name, image);
+
+	cout << endl << "======================================================" << endl;
+	cout << "The reconstruced image is saved to: ../result/" + image_name << endl;
+	cout << "======================================================" << endl << endl;
 }
