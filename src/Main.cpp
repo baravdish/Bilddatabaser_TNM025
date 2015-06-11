@@ -3,6 +3,7 @@
 
 #include "DB.hpp"
 #include "Image.hpp"
+#include "Mosaic.hpp"
 
 int main()
 {
