@@ -6,6 +6,8 @@
 
 int main()
 {
+	/*
+
 	// Setup directory and folder paths, no recursive solution yet
 
 	// ----> Directory for: KRISTOFER <-----
@@ -15,7 +17,7 @@ int main()
 	// ----> Directory for: GABRIEL <-----
 	cv::Mat image_temp = imread("C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
 	string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
-	char a;
+
 	if (!image_temp.data){
 		cout << "Zlatan is too big!" << endl; return -1;
 	}
@@ -30,49 +32,60 @@ int main()
 	
 	DB zlatan_DB = DB(image_temp, 32);
 	zlatan_DB.reconstructImageFromDB(database);
-	
-	// A test for color histogram
-	/*Mat src = imread("test.png", 1)
-	cout << "Total: " << src.total() << endl;
-
-	int r_bins = 2;
-	int g_bins = 2;
-	int b_bins = 2;
-	const int hist_size[] = { r_bins, g_bins, b_bins };
-
-	float r_range[] = { 0, 255 };
-	float g_range[] = { 0, 255 };
-	float b_range[] = { 0, 255 };
-	const float *hist_range[] = { r_range, g_range, b_range };
-
-	cv::Mat histos;
-
-	bool uniform = true;
-	bool accumulate = false;
-	int channels[] = { 0, 1, 2 };
-	// Check if channels and dims is correct
-	calcHist(&src, 1, channels, Mat(), histos, 3, hist_size, hist_range, uniform, accumulate);
-	
-	//cout << "size" << histos.size[0] << endl;
-	//cout << " x " << histos.size[1] << endl;
-	//cout << " x " << histos.size[2] << endl;
-
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 2; j++)
-		{
-			for (int k = 0; k < 2; k++)
-			{	
-				cout << "B: " << i << endl;
-				cout << "G: " << j << endl;
-				cout << "R: " << k << endl;
-				cout << histos.at<Vec3b>(i, j, k) << " " << endl;
-			}
-		}		
-
-
-	}
 	*/
+
+	// A test for color histogram
+	Mat src = imread("beach.jpg", 1);
+	Mat fake = imread("beach.jpg", 1);
+	//imshow("indow", src);
+	//cvWaitKey(0);
+	//imshow("indow", fake);
+	//cvWaitKey(0);
+
+	Mat hsv;
+	Mat hsv2;
+
+	cout << "Total: " << src.total() << endl;
+	cvtColor(src, hsv, COLOR_BGR2HSV);
+	cvtColor(fake, hsv2, COLOR_BGR2HSV);
+	int h_bins = 50; int s_bins = 60;
+	int histSize[] = { h_bins, s_bins };
+
+	// hue varies from 0 to 179, saturation from 0 to 255
+	float h_ranges[] = { 0, 180 };
+	float s_ranges[] = { 0, 256 };
+
+	const float* ranges[] = { h_ranges, s_ranges };
+
+	int channels[] = { 0, 1 };
+	MatND hist_base;
+	MatND hist_base2;
+
+	calcHist(&hsv, 1, channels, Mat(), hist_base, 2, histSize, ranges, true, false);
+	normalize(hist_base, hist_base, 0, 1, NORM_MINMAX, -1, Mat());
+	
+	calcHist(&hsv2, 1, channels, Mat(), hist_base2, 2, histSize, ranges, true, false);
+	normalize(hist_base2, hist_base2, 0, 1, NORM_MINMAX, -1, Mat());
+
+	/*
+	double error = 0.0;
+	int match_index;
+	for (int i = 0; i < 3600; i++)
+	{
+		for (int j = 0; j < 34000; j++)
+		{
+			double temp_error = compareHist(hist_base, hist_base2, CV_COMP_CORREL);
+			if (temp_error > error)
+			{
+				error = temp_error;
+				match_index = j;
+			}
+		}
+		new_zlatan_db.push(db(match_index));
+	}
+	return new_zlatan_vector;
+	*/
+	
 
 	system("pause");
 	return 0;
