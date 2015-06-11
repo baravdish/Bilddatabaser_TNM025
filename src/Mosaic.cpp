@@ -4,7 +4,7 @@
 Mosaic::Mosaic(Mat image) :
 image_source(image)
 {
-
+	setImagesDB();
 }
 
 Mat Mosaic::getImageSource()
@@ -55,11 +55,11 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB, string image_name)
 {
 	// Initiates sizes and numbers
 	int size_of_patch = imagesDB.getImage(0).getImageMat().rows;
-	int nPatchesX = image.cols / size_of_patch;
-	int nPatchesY = image.rows / size_of_patch;
+	int nPatchesX = image_source.cols / size_of_patch;
+	int nPatchesY = image_source.rows / size_of_patch;
 
 	// Make a copy of the Source Image matrix and initiate a patch
-	Mat constructedImage(image);
+	Mat constructedImage(image_source);
 	Mat patch;
 
 	// Replace the image with desired patches
@@ -71,9 +71,8 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB, string image_name)
 		}
 	}
 
-	// Save the result to the computer
-	saveImage(constructedImage, image_name);
-	waitKey(10);
+	// Save the constructed image as result
+	image_result = constructedImage;
 }
 
 Mat Mosaic::queryImageHistogram(Mat histogram, int index)
