@@ -20,8 +20,6 @@ private:
 	void setImagesDB();
 	DB imagesDB;
 
-	
-
 public:
 	// Constructor
 	Mosaic(Mat image);
