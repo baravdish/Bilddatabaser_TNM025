@@ -27,24 +27,17 @@ class DB
 	public:
 		// Constructors
 	    DB(); // Create a new empty DB without source Image
-	    DB(Mat img_source, int size_of_patches); // Create a new DB from a source Image
 
 		// Image to DB initialization
 		void loadImages(string directory, vector<string> folders); // Loads images from folders
-		void saveImage(Mat image, string image_name); // Saves the desired image to desktop as JPG
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
 
-		// Image histogram matching
-		Mat queryImageHistogram(Mat histogram, int index); // Get histogram for query image
-		Mat similiarImagePCA(Mat histogram, Mat queryImage); // Get the similar image
-		void saveSimilarImage(Mat similarImage); // Push back the similar image to similar image vector
-
 		// Set functions
-		void reconstructImageFromDB(DB matched_images_DB, string image_name); // Construct an image from the matched DB and source image
 		void setHistogramMatrix(vector<Image> imageMatrices); // sets the histogram matrix
 		void setCorrelationMatrix(Mat histogram); // sets the correlation matrix
 		void setEigenVectors(Mat C); // sets the eigenvectors
 		void setPCA(Mat E); // sets the PCA
+		void pushBack(Image I); // Pushes a image to the vector
 		
 		// Get functions
 		int getNImages(); // Returns the number of images in this DB
