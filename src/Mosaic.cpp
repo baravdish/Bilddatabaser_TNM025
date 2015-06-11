@@ -49,8 +49,7 @@ void Mosaic::setImagesDB()
 	}
 }
 
-// TODO: Maybe send in a new DB with matched images?
-// TODO: Fix so that the reconstruced image is saved on this class and not replacing source image.
+// TODO: Maybe send in a vector with matched images instead of DB?
 void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 {
 	// Initiates sizes and numbers

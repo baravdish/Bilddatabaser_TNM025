@@ -1,10 +1,7 @@
 ﻿#include "DB.hpp"
 
 // Constructor
-DB::DB()
-{
-	image.data = NULL;
-}
+DB::DB() {}
 
 void DB::printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages)
 {
@@ -40,7 +37,6 @@ Mat DB::getImageMat(int n)
 
 void DB::loadImages(string directory, vector<string> folders)
 {
-	
 	struct dirent *dirp;
 	string temp = directory;
 
@@ -73,7 +69,7 @@ void DB::loadImages(string directory, vector<string> folders)
 					Image img(image_temp);
 					//img.calculateCorrelationMatrixRGB(img.getImageMat());
 					//img.calculateEigvalAndEigvec();
-					images_.push_back(img);
+					pushBack(img);
 					nImages++;
 				}
 
@@ -85,7 +81,6 @@ void DB::loadImages(string directory, vector<string> folders)
 		folderSizes_[folders[n]] = nImages;
 
 		//printInvalidImageInformation(invalidImages, folders[n], images.size());
-
 		closedir(directory_path_);
 
 	} // END OF: folder iteration
@@ -114,9 +109,10 @@ Mat DB::getHistogramMatrix()
 	return histogramMatrix;
 }
 
-void DB::setCorrelationMatrix(Mat histogram)
+void DB::setCorrelationMatrix(Mat H)
 {
-	// TODO: A matrix of size (nBin^3 x nBin^3)
+	// H - A matrix of size (nImages x nBin^3)
+	correlationMatrix = H.t() * H;
 }
 
 Mat DB::getCorrelationMatrix()
@@ -134,22 +130,20 @@ Mat DB::getEigenVectors()
 	return eigenVectors;
 }
 
-void DB::setPCA(Mat E)
+void DB::setHistoEig(Mat H, Mat E)
 {
-	// TODO: A matrix of size (nImages x nEigenVectors)
+	// H - A matrix of size (nImages x nBin^3)
+	// E - A matrix of size (nBin^3 x nEigvectors)
+	histoEig = H * E;
 }
 
-Mat DB::getPCA()
+Mat DB::getHistoEig()
 {
-	return PCA;
-}
-
-vector<Image> DB::getSimilarImages()
-{
-	return similar_images;
+	return histoEig;
 }
 
 void DB::pushBack(Image I)
 {
+	// TODO: take histogram of image and copyTo Histogram-matrix
 	images_.push_back(I);
 }
