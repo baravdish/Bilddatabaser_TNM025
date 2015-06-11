@@ -11,8 +11,8 @@ int main()
 	string image_name = "zlatan_blue_background_1920x1080.jpg";
 
 	// ----> Directory for: KRISTOFER <-----
-	//string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
-	//cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
+	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/" + image_name, 1);
 
 	// ----> Directory for: GABRIEL <-----
 	//string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
@@ -30,8 +30,8 @@ int main()
 	DB database = DB();
 	database.loadImages(mainDirectory, inputFolders);
 	
-	//DB zlatan_DB = DB(image_temp, 32);
-	//zlatan_DB.reconstructImageFromDB(zlatan_DB, image_name);
+	DB zlatan_DB = DB(image_temp, 32);
+	zlatan_DB.reconstructImageFromDB(zlatan_DB, image_name);
 	
 	// A test for color histogram
 	/*Mat src = imread("test.png", 1)
