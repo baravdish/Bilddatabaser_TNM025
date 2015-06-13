@@ -33,7 +33,7 @@ int main()
 	DB database = DB();
 	database.loadImages(mainDirectory, animalFolder);
 
-	//
+	
 	//Mosaic zlatan = Mosaic(image_temp);
 	//zlatan.reconstructImageFromDB(database);
 	//zlatan.saveImage(image_name);

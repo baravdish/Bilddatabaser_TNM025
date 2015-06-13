@@ -12,25 +12,24 @@ using namespace cv;
 class DB
 {
 	private:
-		const int N_EIGENVECTORS = 5;
+		const int N_EIGENVECTORS = 5; 
 		const int BIN_SIZE = 4; // (4x4x4)
 
 	 	vector<Image> images_; // Vector containing all the image objects in this DB
 		std::map<string, int> folderSizes_;
 		int nImages; // Number of images in this DB
-		Mat histogramMatrix; // A matrix of size (nImages x nBin^3)
-		Mat correlationMatrix; // A matrix of size (nBin^3 x nBin^3)
-		Mat eigenVectors; // A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
-		Mat histoEig; // A matrix of size (nImages x nEigenVectors)
-		DIR *directory_path_;
+		Mat histogramMatrix_; // A matrix of size (nImages x nBin^3)
+		Mat correlationMatrix_; // A matrix of size (nBin^3 x nBin^3)
+		Mat eigenVectors_; // A matrix of size (nBin^3 x nImages). NB! nImages can be changed (e.g 20) depending on how many of the largest eigenvalues we want for PCA.
+		Mat histoEig_; // A matrix of size (nImages x nEigenVectors)
+		DIR *directory_path_; // A pointer to a 'directory-object' to read files in folder
 
 	public:
 		// Constructors
 	    DB(); // Create a new empty DB without source Image
-
 		// Image to DB initialization
 		void loadImages(string directory, vector<string> folders); // Loads images from folders
-		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages);
+		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages); // Print information about images that were not successfully loaded
 		void initializeMatrices(); // Initializes all the matrices in this DB - corr, eig, hist...
 
 		// Set functions

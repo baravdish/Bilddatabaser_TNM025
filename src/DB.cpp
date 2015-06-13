@@ -42,7 +42,6 @@ void DB::loadImages(string directory, vector<string> folders)
 {
 	struct dirent *dirp;
 	string temp = directory;
-
 	for (size_t n = 0; n < folders.size(); n++)
 	{
 		vector<int> invalidImages;
@@ -70,12 +69,9 @@ void DB::loadImages(string directory, vector<string> folders)
 				else
 				{
 					Image img(image_temp);
-					//img.calculateCorrelationMatrixRGB(img.getImageMat());
-					//img.calculateEigvalAndEigvec();
 					pushBack(img);
 					nr_of_Images++;
 				}
-
 				invImages++;
 			}
 		} // END OF: image iterations
@@ -110,13 +106,13 @@ void DB::initializeMatrices()
 	setHistogramMatrix(images_);
 
 	// Initiate the C (nBin^3 x nBin^3)
-	//setCorrelationMatrix(histogramMatrix);
+	setCorrelationMatrix(histogramMatrix_);
 
 	// Initiate the PCA (nImages x nEigenVectors)
-	setEigenVectors(histogramMatrix);
+	setEigenVectors(histogramMatrix_);
 
 	// Initiate the HE (nImages x nBin^3) * (nBin^3 x nEigvectors)
-	setHistoEig(histogramMatrix, eigenVectors);
+	setHistoEig(histogramMatrix_, eigenVectors_);
 }
 
 void DB::setHistogramMatrix(vector<Image> imageMatrices)
@@ -125,75 +121,65 @@ void DB::setHistogramMatrix(vector<Image> imageMatrices)
 	Mat H(pow(BIN_SIZE, 3), nImages, CV_32F, Scalar(0.0));
 
 	for (int i = 0; i < nImages; i++)
-	{	
+	{
 		Mat h(imageMatrices[i].getHistogram());
 		h.copyTo(H(Rect(i, 0, 1, pow(BIN_SIZE, 3))));
 	}
 
-	histogramMatrix = H.t();
+	H = H.t();
+	histogramMatrix_ = H.clone();
 }
 
 Mat DB::getHistogramMatrix()
 {
-	return histogramMatrix;
+	return histogramMatrix_;
 }
 
 void DB::setCorrelationMatrix(Mat H)
 {
 	// H - A matrix of size (nImages x nBin^3)
-	correlationMatrix = H.t() * H;
-}
+	correlationMatrix_ = H.t() * H;
+} 
 
 Mat DB::getCorrelationMatrix()
 {
-	return correlationMatrix;
+	return correlationMatrix_;
 }
 
 void DB::setEigenVectors(Mat H)
 {
 	// Perform PCA
-
-	PCA pca = PCA(H, Mat(), CV_PCA_DATA_AS_ROW, N_EIGENVECTORS);
+	PCA pca(H, Mat(), CV_PCA_DATA_AS_ROW, N_EIGENVECTORS);
 
 	// E - A matrix of size (nBin^3 x nImages)
 	// Get the best eigenvectors and save them
-	eigenVectors = pca.eigenvectors;
-	cout << eigenVectors << endl;
+	eigenVectors_ = pca.eigenvectors.clone();
 
-	for (int i = 0; i < N_EIGENVECTORS; i++)
-	{
-		Mat eigTemp;
-		eigenVectors(Rect(i, 0, pow(BIN_SIZE, 3), 1)).copyTo(eigTemp);
-		//cout << eigenVectors;
-		normalize(eigTemp, eigTemp);
-		
-		char a;
-		cin >> a;
-		eigTemp.copyTo(eigenVectors(Rect(i, 0, pow(BIN_SIZE, 3), 1)));
-	}
-	
+	// TODO: If this was planned to do something, check what that was
+	// If not: Remove this part
+	//for (int i = 0; i < N_EIGENVECTORS; i++)
+	//{
+	//	Mat eigTemp;
+	//	eigenVectors_(Rect(i, 0, pow(BIN_SIZE, 3), 1)).copyTo(eigTemp);
+	//	eigTemp.copyTo(eigenVectors_(Rect(i, 0, pow(BIN_SIZE, 3), 1)));
+	//}
 }
 
 Mat DB::getEigenVectors()
 {
-	return eigenVectors;
+	return eigenVectors_;
 }
 
 void DB::setHistoEig(Mat H, Mat E)
 {
 	// H - A matrix of size (nImages x nBin^3)
 	// E - A matrix of size (nBin^3 x nEigvectors)
-	cout << "SIZE OF H: " << H.t().size() << endl;
-	cout << "SIZE OF E: " << E.size() << endl;
-
-	histoEig = E*H.t();
-	cout << histoEig.size() << endl;
-	cout << histoEig << endl;
+	histoEig_ = E*H.t();
 }
 
 Mat DB::getHistoEig()
 {
-	return histoEig;
+	return histoEig_;
 }
 
 void DB::pushBack(Image I)

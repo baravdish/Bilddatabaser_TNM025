@@ -26,30 +26,31 @@ void Image::setHistogram(Mat image_src)
 	const float* ranges[3] = { hranges, hranges, hranges };
 	int channels[3] = { 0, 1, 2 };
 
-	calcHist(&image_src, 1, channels, Mat(), histogram, 3, histSize, ranges, true, false);
+	calcHist(&image_src, 1, channels, Mat(), histogram_, 3, histSize, ranges, true, false);
 
-	histogram = histogram / image_src.total();
+	histogram_ = histogram_ / image_src.total();
 
 	vector<float> histogramVec(pow(BIN_SIZE, 3));
-
+	float sum = 0;
 	int count = 0;
-	// TODO: Check if the program is slow, if so; check this piece
+	// TODO: Check if the program is slow, if so; check this part
 	for (int i = 0; i < BIN_SIZE; i++) {
 		for (int j = 0; j < BIN_SIZE; j++) {
 			for (int k = 0; k < BIN_SIZE; k++) {
-				histogramVec[count] = histogram.at<float>(i, j, k);
+				histogramVec[count] = histogram_.at<float>(i, j, k);
 				count++;
+				sum = sum + histogram_.at<float>(i, j, k);
 			}
 		}
 	}
 
 	Mat temp(histogramVec);
-	histogram = temp;
+	histogram_ = temp.clone();
 }
 
 Mat Image::getHistogram()
 {
-	return histogram;
+	return histogram_;
 }
 
 void Image::setRGB(Mat image_src)

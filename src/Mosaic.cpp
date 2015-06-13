@@ -2,34 +2,34 @@
 
 // Constructor
 Mosaic::Mosaic(Mat image) :
-image_source(image)
+image_source_(image)
 {
 	setImagesDB();
 }
 
 Mat Mosaic::getImageSource()
 {
-	return image_source;
+	return image_source_;
 }
 
 void Mosaic::setImagesDB()
 {
 	// Initiate rows, cols and Image.
-	int rows = image_source.rows;
-	int cols = image_source.cols;
+	int rows = image_source_.rows;
+	int cols = image_source_.cols;
 
 	// Resize image so that it has mod(Y, size_of_patch) == 0
 	if (rows % SIZE_OF_PATCH != 0)
 	{
-		resize(image_source, image_source, Size(cols, rows - (rows % SIZE_OF_PATCH)), 0, 0, INTER_AREA);
-		rows = image_source.rows; //update rows!
+		resize(image_source_, image_source_, Size(cols, rows - (rows % SIZE_OF_PATCH)), 0, 0, INTER_AREA);
+		rows = image_source_.rows; //update rows!
 	}
 
 	// Resize image so that it has mod(X, size_of_patch) == 0
 	if (cols % SIZE_OF_PATCH != 0)
 	{
-		resize(image_source, image_source, Size(cols - (cols % SIZE_OF_PATCH), rows), 0, 0, INTER_AREA);
-		cols = image_source.cols; //update cols!
+		resize(image_source_, image_source_, Size(cols - (cols % SIZE_OF_PATCH), rows), 0, 0, INTER_AREA);
+		cols = image_source_.cols; //update cols!
 	}
 
 	// Get the number of patches in X and Y.
@@ -42,7 +42,7 @@ void Mosaic::setImagesDB()
 	{
 		for (int x = 0; x < nPatchesX; x++)
 		{
-			patch = cv::Mat(image_source, cv::Rect(x*SIZE_OF_PATCH, y*SIZE_OF_PATCH, SIZE_OF_PATCH, SIZE_OF_PATCH)); // (roiLeft, roiTop, roiWidth, roiHeight)
+			patch = cv::Mat(image_source_, cv::Rect(x*SIZE_OF_PATCH, y*SIZE_OF_PATCH, SIZE_OF_PATCH, SIZE_OF_PATCH)); // (roiLeft, roiTop, roiWidth, roiHeight)
 			Image temp_img = Image(patch);
 			imagesDB.pushBack(temp_img);
 		}
@@ -57,11 +57,11 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 {
 	// Initiates sizes and numbers
 	int size_of_patch = imagesDB.getImage(0).getImageMat().rows;
-	int nPatchesX = image_source.cols / size_of_patch;
-	int nPatchesY = image_source.rows / size_of_patch;
+	int nPatchesX = image_source_.cols / size_of_patch;
+	int nPatchesY = image_source_.rows / size_of_patch;
 
 	// Make a copy of the Source Image matrix and initiate a patch
-	Mat constructedImage(image_source);
+	Mat constructedImage(image_source_);
 	Mat patch;
 
 	// Replace the image with desired patches
@@ -74,7 +74,7 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 	}
 
 	// Save the constructed image as result
-	image_result = constructedImage;
+	image_result_ = constructedImage;
 }
 
 Mat Mosaic::similiarImagePCA(Mat histogram, Mat queryImage)
@@ -86,7 +86,7 @@ Mat Mosaic::similiarImagePCA(Mat histogram, Mat queryImage)
 void Mosaic::pushSimilarImage(Image similarImage)
 {
 	// TODO: Push back the similar image to the vector
-	similar_image.push_back(similarImage);
+	similar_image_.push_back(similarImage);
 }
 
 DB Mosaic::getImagesDB()
@@ -97,7 +97,7 @@ DB Mosaic::getImagesDB()
 // Saves the image to result folder
 void Mosaic::saveImage(string image_name)
 {
-	imwrite("../result/" + image_name, image_result);
+	imwrite("../result/" + image_name, image_result_);
 
 	cout << endl << "======================================================" << endl;
 	cout << "The reconstruced image is saved to: ../result/" + image_name << endl;

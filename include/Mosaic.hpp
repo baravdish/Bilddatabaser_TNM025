@@ -14,9 +14,9 @@ class Mosaic
 private:
 	const int SIZE_OF_PATCH = 32; // (32x32 large patches)
 
-	Mat image_source; // This image source
-	Mat image_result; // The mosaic
-	vector<Image> similar_image; // Contains similar images in the same order as the DB
+	Mat image_source_; // This image source
+	Mat image_result_; // The mosaic
+	vector<Image> similar_image_; // Contains similar images in the same order as the DB
 
 	// Set the images for this mosaic to a DB
 	void setImagesDB();

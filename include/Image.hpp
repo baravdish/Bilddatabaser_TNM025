@@ -13,13 +13,12 @@ class Image
 		const int BIN_SIZE = 4; // The size of bins
 		Mat pixel_values_mat_RGB_; // A mat containing all the RGB values of that image in a Nx3 matrix
 		Mat pixel_values_mat_IC2_; // ^... but for IC2
-		Mat histogram;
+		Mat histogram_;
 		Mat image_mat_; // This is image_src.
 
 	public:
 		// Constructor
 	    Image(Mat image_src); // Constructor, image matrix needed
-
 		// Set functions
 		void setRGB(Mat image_src);
 		void setHSV(Mat image_src);
