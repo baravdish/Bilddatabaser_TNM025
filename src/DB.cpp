@@ -40,14 +40,19 @@ Mat DB::getImageMat(int n)
 
 void DB::loadImages(string directory, vector<string> inputFolders)
 {
+
 	struct dirent *dirp;
 	string temp = directory;
 	for (size_t n = 0; n < inputFolders.size(); n++)
 	{
+		// Track invalid images
 		vector<int> invalidImages;
-		int nr_of_Images = 0;
 		int invImages = 0;
+
+		int nr_of_Images = 0;
 		directory = temp + inputFolders[n];
+
+		// Open directory path
 		directory_path_ = opendir(directory.c_str());
 		
 		cout << "Loading images in folder: " << inputFolders[n] << "..." << endl;
@@ -56,6 +61,8 @@ void DB::loadImages(string directory, vector<string> inputFolders)
 		else
 		{
 			string filepath;
+			
+			// Start read a folder
 			while ((dirp = readdir(directory_path_)))
 			{
 				filepath = directory + "/" + dirp->d_name;
@@ -63,6 +70,7 @@ void DB::loadImages(string directory, vector<string> inputFolders)
 				if (!image_temp.data)
 				{
 					//cout << "Could not read data in " << filepath << endl;
+					// Track invalid images
 					invalidImages.push_back(invImages);
 				}
 				else
@@ -90,8 +98,7 @@ void DB::loadImages(string directory, vector<string> inputFolders)
 		std::cout << elem.first << " has " << elem.second << " images " "\n";
 	}
 
-	// TODO: Activate when working.
-	 initializeMatrices();
+	initializeMatrices();
 }
 
 int DB::getNImages()

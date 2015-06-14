@@ -9,7 +9,6 @@ image_mat_(image_src)
 	setHSV(image_src);
 
 	// Set the histogram of this Image
-
 	setHistogram(image_src);
 }
 
@@ -31,7 +30,6 @@ void Image::setHistogram(Mat image_src)
 	histogram_ = histogram_ / image_src.total();
 
 	vector<float> histogramVec(pow(BIN_SIZE, 3));
-	float sum = 0;
 	int count = 0;
 	// TODO: Check if the program is slow, if so; check this part
 	for (int i = 0; i < BIN_SIZE; i++) {
@@ -39,7 +37,6 @@ void Image::setHistogram(Mat image_src)
 			for (int k = 0; k < BIN_SIZE; k++) {
 				histogramVec[count] = histogram_.at<float>(i, j, k);
 				count++;
-				sum = sum + histogram_.at<float>(i, j, k);
 			}
 		}
 	}
