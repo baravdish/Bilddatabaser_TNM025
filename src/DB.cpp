@@ -154,15 +154,7 @@ void DB::setEigenVectors(Mat H)
 	// E - A matrix of size (nBin^3 x nImages)
 	// Get the best eigenvectors and save them
 	eigenVectors_ = pca.eigenvectors.clone();
-
-	// TODO: If this was planned to do something, check what that was
-	// If not: Remove this part
-	//for (int i = 0; i < N_EIGENVECTORS; i++)
-	//{
-	//	Mat eigTemp;
-	//	eigenVectors_(Rect(i, 0, pow(BIN_SIZE, 3), 1)).copyTo(eigTemp);
-	//	eigTemp.copyTo(eigenVectors_(Rect(i, 0, pow(BIN_SIZE, 3), 1)));
-	//}
+	// TODO: Check if normalizing is done correctly
 }
 
 Mat DB::getEigenVectors()

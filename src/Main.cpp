@@ -10,7 +10,7 @@ using namespace cv;
 int main()
 {
 	// Setup directory and folder paths, no recursive solution yet
-	string image_name = "zlatan_blue_background_1920x1080.jpg";
+	string image_name = "zlatan_blue-yellow_background_1440x900.jpg";
 
 	// ----> Directory for: KRISTOFER <-----
 	//string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
@@ -31,12 +31,15 @@ int main()
 
 	// Initilize the database
 	DB database = DB();
-	database.loadImages(mainDirectory, animalFolder);
+	database.loadImages(mainDirectory, inputFolders);
 
 	
-	//Mosaic zlatan = Mosaic(image_temp);
-	//zlatan.reconstructImageFromDB(database);
-	//zlatan.saveImage(image_name);
+	Mosaic zlatan = Mosaic(image_temp);
+
+	zlatan.matchSimiliarImage(database);
+
+	zlatan.reconstructImageFromDB();
+	zlatan.saveImage(image_name);
 	
 	system("pause");
 	return 0;

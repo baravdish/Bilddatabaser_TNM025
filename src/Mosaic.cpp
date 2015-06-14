@@ -47,13 +47,11 @@ void Mosaic::setImagesDB()
 			imagesDB.pushBack(temp_img);
 		}
 	}
-
-	// TODO: Activate when working.
-	// imagesDB.initializeMatrices();
+	imagesDB.setHistogramMatrix(imagesDB.getImageDatabase());
 }
 
 // TODO: Maybe send in a vector with matched images instead of DB?
-void Mosaic::reconstructImageFromDB(DB matched_images_DB)
+void Mosaic::reconstructImageFromDB()
 {
 	// Initiates sizes and numbers
 	int size_of_patch = imagesDB.getImage(0).getImageMat().rows;
@@ -65,11 +63,14 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 	Mat patch;
 
 	// Replace the image with desired patches
+	int count = 0;
 	for (int y = 0; y < nPatchesY; y++)
 	{
 		for (int x = 0; x < nPatchesX; x++)
 		{
-			matched_images_DB.getImageMat(x + y*nPatchesX).copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch))); // (roiLeft, roiTop, roiWidth, roiHeight)
+			Mat similar_patch = similar_image_[count].getImageMat();
+			similar_patch.copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch))); // (roiLeft, roiTop, roiWidth, roiHeight)
+			count++;
 		}
 	}
 
@@ -77,15 +78,42 @@ void Mosaic::reconstructImageFromDB(DB matched_images_DB)
 	image_result_ = constructedImage;
 }
 
-Mat Mosaic::similiarImagePCA(Mat histogram, Mat queryImage)
+//TODO: If not correct, check previous sizes (cols,rows)
+void Mosaic::matchSimiliarImage(DB database)
 {
-	// TODO: Get the similar image
-	return histogram;
+
+	Mat queryHistoEig = imagesDB.getHistogramMatrix()*database.getEigenVectors().t();
+	Mat histoEig = database.getHistoEig().t();
+
+	int qRows = queryHistoEig.rows;
+	int qCols = queryHistoEig.cols;
+
+	int rows = histoEig.rows;
+	int cols = histoEig.cols;
+	int index = -1;
+	for (int i = 0; i < qRows; i++)
+	{		
+		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+		pushSimilarImage(database.getImage(index));
+	}
+}
+
+int Mosaic::L2Norm(Mat qHistoEigVec, Mat histoEig)
+{
+	Mat qHistoEigRep = repeat(qHistoEigVec, histoEig.rows, 1);
+	Mat diff = qHistoEigRep - histoEig;
+	Mat diffPow = diff.mul(diff);
+	Mat L2Sum;
+	reduce(diffPow, L2Sum, 1, CV_REDUCE_SUM,-1);
+	double min, max;
+	Point min_loc, max_loc;
+	minMaxLoc(L2Sum, &min, &max, &min_loc, &max_loc);
+
+	return min_loc.y;
 }
 
 void Mosaic::pushSimilarImage(Image similarImage)
 {
-	// TODO: Push back the similar image to the vector
 	similar_image_.push_back(similarImage);
 }
 
