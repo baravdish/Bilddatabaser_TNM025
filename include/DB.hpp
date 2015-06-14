@@ -28,7 +28,7 @@ class DB
 		// Constructors
 	    DB(); // Create a new empty DB without source Image
 		// Image to DB initialization
-		void loadImages(string directory, vector<string> folders); // Loads images from folders
+		void loadImages(string directory, vector<string> folders, string originalDirectory); // Loads images from folders
 		void printInvalidImageInformation(vector<int> invalidImages, string folder, int nImages); // Print information about images that were not successfully loaded
 		void initializeMatrices(); // Initializes all the matrices in this DB - corr, eig, hist...
 

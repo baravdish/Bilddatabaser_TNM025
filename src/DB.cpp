@@ -38,28 +38,36 @@ Mat DB::getImageMat(int n)
 	return images_[n].getImageMat();
 }
 
-void DB::loadImages(string directory, vector<string> folders)
+void DB::loadImages(string directory, vector<string> inputFolders, string originalDirectory)
 {
 	struct dirent *dirp;
 	string temp = directory;
-	for (size_t n = 0; n < folders.size(); n++)
+	string temp_out = originalDirectory;
+	string directory_out;
+	Mat dst;
+	vector<string> outputFolders = { "animal3", "beach3", "cat3", "colorful3",
+		"doll3", "elegant3", "flower3", "food3", "formal3", "garden3" };
+	for (size_t n = 0; n < inputFolders.size(); n++)
 	{
 		vector<int> invalidImages;
 		int nr_of_Images = 0;
 		int invImages = 0;
-		directory = temp + folders[n];
+		directory = temp + inputFolders[n];
+		directory_out = temp + outputFolders[n];
 		directory_path_ = opendir(directory.c_str());
 		
-		cout << "Loading images in folder: " << folders[n] << "..." << endl;
+		cout << "Loading images in folder: " << inputFolders[n] << "..." << endl;
 		if (directory_path_ == NULL)
 			cout << "Error opening directory. Not valid." << endl;
 		else
 		{
 			string filepath;
+			string filepath_out;
 			while ((dirp = readdir(directory_path_)))
 			{
 				filepath = directory + "/" + dirp->d_name;
-				
+				filepath_out = directory_out + "/" + dirp->d_name;
+
 				cv::Mat image_temp = imread(filepath, 1);
 				if (!image_temp.data)
 				{
@@ -68,6 +76,7 @@ void DB::loadImages(string directory, vector<string> folders)
 				}
 				else
 				{
+					imwrite(filepath_out, image_temp);
 					Image img(image_temp);
 					pushBack(img);
 					nr_of_Images++;
@@ -77,7 +86,7 @@ void DB::loadImages(string directory, vector<string> folders)
 		} // END OF: image iterations
 
 		// Connect each folder name with its size
-		folderSizes_[folders[n]] = nr_of_Images;
+		folderSizes_[inputFolders[n]] = nr_of_Images;
 
 		//printInvalidImageInformation(invalidImages, folders[n], images.size());
 		closedir(directory_path_);
