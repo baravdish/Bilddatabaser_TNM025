@@ -12,7 +12,7 @@ using namespace cv;
 class Mosaic
 {
 private:
-	const int SIZE_OF_PATCH = 32; // (32x32 large patches)
+	const int SIZE_OF_PATCH = 8; // (32x32 large patches)
 	const int BIN_SIZE = 4;
 	Mat image_source_; // This image source
 	Mat image_result_; // The mosaic
