@@ -31,6 +31,7 @@ void Image::setHistogram(Mat image_src)
 
 	vector<float> histogramVec(pow(BIN_SIZE, 3));
 	int count = 0;
+
 	// TODO: Check if the program is slow, if so; check this part
 	for (int i = 0; i < BIN_SIZE; i++) {
 		for (int j = 0; j < BIN_SIZE; j++) {

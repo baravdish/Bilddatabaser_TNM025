@@ -7,44 +7,81 @@
 
 using namespace std;
 using namespace cv;
+
 int main()
 {
 	// Setup directory and folder paths, no recursive solution yet
-	string image_name = "zlatan_blue-yellow_background_1440x900.jpg";
+	string image_name = "zlatan_blue_background_1920x1080.jpg";
 
 	// ----> Directory for: KRISTOFER <-----
-	string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
-	cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
+	//string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
+	//cv::Mat image_temp = imread("C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/zlatan/zlatan_blue_background_1920x1080.jpg", 1);
 
 	// ----> Directory for: GABRIEL <-----
-	//string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
-	//Mat image_temp = imread("C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/zlatan/" + image_name, 1);
+	string mainDirectory = "C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/";
+	Mat image_temp = imread("C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/zlatan/" + image_name, 1);
 
 	if (!image_temp.data){
 		cout << "Zlatan is too big!" << endl; return -1;
 	}
 	
-	vector<string> inputFolders = { "andy_warhol4", "claude_monet4", "animal4", "beach4", "cat4", "colorful4",
-								    "doll4", "elegant4", "flower4", "food4", "formal4", "garden4" };
-	vector<string> animalFolder = { "animal2" };
+	vector<string> inputFolders = { "animal3", "beach3", "cat3", "colorful3",
+								    "doll3", "elegant3", "flower3", "food3", "formal3", "garden3" };
+	vector<string> animalFolder = { "animal4" };
 
 	// Initilize the database
 	DB database = DB();
-	database.loadImages(mainDirectory, inputFolders);
-	
-	// Create a database of patches from a query image
-	Mosaic zlatan = Mosaic(image_temp);
+	database.loadImages(mainDirectory, animalFolder);
 
-	// Match similar images in the mosaic with the database 
-	// with PCA/KLT and L2-norm
-	zlatan.matchSimiliarImage(database);
 
-	// Reconstruct the matched images
-	zlatan.reconstructImageFromDB();
+	// Choose mode: 
+	// 0 if you want to see zlatan
+	// 1 if you want to start the cam
+#define CAM 0
 
-	// Write and save the reconstructed image
-	zlatan.saveImage(image_name);
-	
+	char *name = "Window";
+	namedWindow(name, CV_WINDOW_FULLSCREEN);
+
+	if (CAM)
+	{
+		VideoCapture cap(0);
+
+		if (!cap.isOpened())
+			return -1;
+
+		while (true)
+		{
+			Mat frame;
+
+			// Grab a frame from camera
+			cap >> frame;
+
+			// Create a database of patches from a query image
+			Mosaic zlatan = Mosaic(frame);
+			// Match similar images in the mosaic with the database with PCA/KLT and L2-norm
+			zlatan.matchSimiliarImage(database);
+			// Reconstruct the matched images
+			zlatan.reconstructImageFromDB();
+
+			imshow(name, zlatan.getImageResult());
+			cvWaitKey(1);
+		}
+	}
+	else
+	{
+		// Create a database of patches from a query image
+		Mosaic zlatan = Mosaic(image_temp);
+		// Match similar images in the mosaic with the database with PCA/KLT and L2-norm
+		zlatan.matchSimiliarImage(database);
+		// Reconstruct the matched images
+		zlatan.reconstructImageFromDB();
+		// Write and save the reconstructed image
+		zlatan.saveImage(image_name);
+
+		imshow(name, zlatan.getImageResult());
+		cvWaitKey(0);
+	}
+
 	system("pause");
 	return 0;
 }

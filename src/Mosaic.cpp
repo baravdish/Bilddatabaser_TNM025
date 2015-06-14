@@ -12,12 +12,18 @@ Mat Mosaic::getImageSource()
 	return image_source_;
 }
 
+Mat Mosaic::getImageResult()
+{
+	return image_result_;
+}
+
+
 void Mosaic::setImagesDB()
 {
 	// Initiate rows, cols and Image.
 	int rows = image_source_.rows;
 	int cols = image_source_.cols;
-
+	
 	// Resize image so that it has mod(Y, size_of_patch) == 0
 	if (rows % SIZE_OF_PATCH != 0)
 	{
@@ -78,10 +84,9 @@ void Mosaic::reconstructImageFromDB()
 	image_result_ = constructedImage;
 }
 
-//TODO: If not correct, check previous sizes (cols,rows)
 void Mosaic::matchSimiliarImage(DB database)
 {
-
+	// Change base to a base of eigenvectors - PCA
 	Mat queryHistoEig = imagesDB.getHistogramMatrix()*database.getEigenVectors().t();
 	Mat histoEig = database.getHistoEig().t();
 
@@ -91,9 +96,12 @@ void Mosaic::matchSimiliarImage(DB database)
 	int rows = histoEig.rows;
 	int cols = histoEig.cols;
 	int index = -1;
+
 	for (int i = 0; i < qRows; i++)
-	{		
+	{	
+		// Use L2-norm and find closest vector
 		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+		// Save the index for the most similar image 
 		pushSimilarImage(database.getImage(index));
 	}
 }

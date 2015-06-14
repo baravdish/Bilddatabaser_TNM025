@@ -12,7 +12,7 @@ using namespace cv;
 class Mosaic
 {
 private:
-	const int SIZE_OF_PATCH = 8; // (32x32 large patches)
+	const int SIZE_OF_PATCH = 8;// (32x32 large patches)
 	const int BIN_SIZE = 4;
 	Mat image_source_; // This image source
 	Mat image_result_; // The mosaic
@@ -23,6 +23,7 @@ private:
 	DB imagesDB;
 
 public:
+
 	// Constructor
 	Mosaic(Mat image);
 
@@ -39,9 +40,9 @@ public:
 	// Calculate L2-norm between a query vector and row-wise vectors in matrix
 	int L2Norm(Mat qHistoEigVec, Mat histoEig);
 
-
 	// Get functions
 	Mat getImageSource();
+	Mat getImageResult();
 	DB getImagesDB();
 
 };
