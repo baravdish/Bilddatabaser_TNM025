@@ -31,8 +31,7 @@ int main()
 
 	// Initilize the database
 	DB database = DB();
-	database.loadImages(mainDirectory, inputFolders);
-
+	database.loadImages(mainDirectory, animalFolder);
 	
 	Mosaic zlatan = Mosaic(image_temp);
 

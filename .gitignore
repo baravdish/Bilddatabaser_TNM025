@@ -9,4 +9,13 @@
 *.jpg
 *.dll
 *.db
+*.log
+*.lastbuildstate
+*.tlog
+*.obj
+*.pdb
+*.vspx
+*.exe
+*.psess
+*.png
 dataset/
