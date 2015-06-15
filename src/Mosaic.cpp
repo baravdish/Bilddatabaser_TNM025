@@ -1,7 +1,7 @@
 #include "Mosaic.hpp"
 // Constructor
-Mosaic::Mosaic(Mat image) :
-image_source_(image)
+Mosaic::Mosaic(Mat image, int patch_size) :
+image_source_(image), SIZE_OF_PATCH(patch_size)
 {
 	setImagesDB();
 }
@@ -154,7 +154,7 @@ int Mosaic::L1Norm(Mat qHistoEigVec, Mat histoEig)
 			diff = histEigRow[j] - qEigVec[j];
 
 			// abs: |diff|
-			if (diff < 0.0f)
+			if (diff < 0.0000f)
 				diff = -1.0f*diff;
 
 			sum = sum + diff;
