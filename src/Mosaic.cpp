@@ -1,5 +1,4 @@
 #include "Mosaic.hpp"
-
 // Constructor
 Mosaic::Mosaic(Mat image) :
 image_source_(image)
@@ -96,28 +95,80 @@ void Mosaic::matchSimiliarImage(DB database)
 	int rows = histoEig.rows;
 	int cols = histoEig.cols;
 	int index = -1;
-
+	
+	//double t;
+	//t = (double)getTickCount();
 	for (int i = 0; i < qRows; i++)
 	{	
 		// Use L2-norm and find closest vector
-		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
-		// Save the index for the most similar image 
+		//index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+
+		// Use L1-norm and find closest vector
+		index = L1Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+
+		// Save the index for the most similar image
 		pushSimilarImage(database.getImage(index));
 	}
+	//double b = (double)getTickCount();
+	//t = (b - t) / getTickFrequency();
+	//cout << "TOTAL TIME: " << t << endl;
+	
 }
 
 int Mosaic::L2Norm(Mat qHistoEigVec, Mat histoEig)
 {
 	Mat qHistoEigRep = repeat(qHistoEigVec, histoEig.rows, 1);
-	Mat diff = qHistoEigRep - histoEig;
+	
+	Mat diff = cv::abs(qHistoEigRep - histoEig);
+
 	Mat diffPow = diff.mul(diff);
+	
 	Mat L2Sum;
+	
 	reduce(diffPow, L2Sum, 1, CV_REDUCE_SUM,-1);
+
 	double min, max;
 	Point min_loc, max_loc;
 	minMaxLoc(L2Sum, &min, &max, &min_loc, &max_loc);
-
+	
 	return min_loc.y;
+}
+
+int Mosaic::L1Norm(Mat qHistoEigVec, Mat histoEig)
+{
+	float sum = 0.0f;
+	float min = 10000.0f;
+	float diff = 0.0f;
+	int index = 0;
+
+	// Point to the query eigenvector, fast access to the values
+	float* qEigVec = qHistoEigVec.ptr<float>(0);
+	
+	for (int i = 0; i < histoEig.rows; ++i)
+	{
+		// Point to the row of the histoEig matrix, fast access to the values at row i
+		float* histEigRow = histoEig.ptr<float>(i);
+		sum = 0;
+		for (int j = 0; j < histoEig.cols; j++)
+		{
+			diff = histEigRow[j] - qEigVec[j];
+
+			// abs: |diff|
+			if (diff < 0.0f)
+				diff = -1.0f*diff;
+
+			sum = sum + diff;
+		}
+
+		if (sum < min)
+		{
+			min = sum;
+			// Save index for smallest value
+			index = i;
+		}
+
+	}
+	return index;
 }
 
 void Mosaic::pushSimilarImage(Image similarImage)

@@ -22,44 +22,53 @@ int main()
 	Mat image_temp = imread("C:/Users/Gabriel/Desktop/Bildatabaser/Bilddatabaser_TNM025/dataset/zlatan/" + image_name, 1);
 
 	if (!image_temp.data){
-		cout << "Zlatan is too big!" << endl; return -1;
-	}
+		cout << "Zlatan is too big!" << endl; return -1;}
 	
-	vector<string> inputFolders = { "animal3", "beach3", "cat3", "colorful3",
-								    "doll3", "elegant3", "flower3", "food3", "formal3", "garden3" };
+	string extension = "4"; // 4 => 8x8 3 => 16x16 2 => 32x32
+
+	vector<string> inputFolders = { "animal", "beach", "cat", "colorful",
+								    "doll", "elegant", "flower", "food", "formal", "garden" };
+	
+	for (int i = 0; i < inputFolders.size(); i++)
+		inputFolders[i] += extension;
+
+
+
 	vector<string> animalFolder = { "animal4" };
 
 	// Initilize the database
 	DB database = DB();
-	database.loadImages(mainDirectory, animalFolder);
-
-
+	database.loadImages(mainDirectory, inputFolders);
+	
 	// Choose mode: 
 	// 0 if you want to see zlatan
 	// 1 if you want to start the cam
-#define CAM 0
-
-	char *name = "Window";
-	namedWindow(name, CV_WINDOW_FULLSCREEN);
+#define CAM 1
 
 	if (CAM)
 	{
 		VideoCapture cap(0);
-
+		char *name = "Window";
+		namedWindow(name, CV_WINDOW_FULLSCREEN);
 		if (!cap.isOpened())
+		{
+			cout << "Could not open the camera! " << endl;
 			return -1;
+		}
 
 		while (true)
 		{
 			Mat frame;
-
+			
 			// Grab a frame from camera
 			cap >> frame;
-
+			
 			// Create a database of patches from a query image
 			Mosaic zlatan = Mosaic(frame);
+			
 			// Match similar images in the mosaic with the database with PCA/KLT and L2-norm
 			zlatan.matchSimiliarImage(database);
+
 			// Reconstruct the matched images
 			zlatan.reconstructImageFromDB();
 
@@ -71,15 +80,15 @@ int main()
 	{
 		// Create a database of patches from a query image
 		Mosaic zlatan = Mosaic(image_temp);
+
 		// Match similar images in the mosaic with the database with PCA/KLT and L2-norm
 		zlatan.matchSimiliarImage(database);
+
 		// Reconstruct the matched images
 		zlatan.reconstructImageFromDB();
+
 		// Write and save the reconstructed image
 		zlatan.saveImage(image_name);
-
-		imshow(name, zlatan.getImageResult());
-		cvWaitKey(0);
 	}
 
 	system("pause");

@@ -39,6 +39,7 @@ public:
 	
 	// Calculate L2-norm between a query vector and row-wise vectors in matrix
 	int L2Norm(Mat qHistoEigVec, Mat histoEig);
+	int L1Norm(Mat qHistoEigVec, Mat histoEig);
 
 	// Get functions
 	Mat getImageSource();
