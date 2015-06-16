@@ -12,8 +12,10 @@ using namespace cv;
 class DB
 {
 	private:
-		const int N_EIGENVECTORS = 5; 
+		const int N_EIGENVECTORS = 25; 
 		const int BIN_SIZE = 4; // (4x4x4)
+		const int nClusters_ = 100; // Golden rule nClusters = sqrt(nImages/2)
+		const int nAttempts_ = 20;
 
 	 	vector<Image> images_; // Vector containing all the image objects in this DB
 		std::map<string, int> folderSizes_;
@@ -25,6 +27,11 @@ class DB
 		DIR *directory_path_; // A pointer to a 'directory-object' to read files in folder
 
 	public:
+		vector<int> labels_;
+		Mat centers_;
+		vector<vector<int>> labelIndexes_;
+		vector<Mat> clusters_;
+
 		// Constructors
 	    DB(); // Create a new empty DB without source Image
 		// Image to DB initialization
@@ -37,6 +44,7 @@ class DB
 		void setCorrelationMatrix(Mat H); // sets the correlation matrix
 		void setEigenVectors(Mat H); // sets the eigenvectors
 		void setHistoEig(Mat H, Mat E); // sets the PCA
+		void setKMeans(int nClusters, int nAttempts); // sets the K-means cluster for the database
 		void pushBack(Image I); // Pushes a image to the vector
 		
 		// Get functions

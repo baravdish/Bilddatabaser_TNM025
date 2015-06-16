@@ -85,6 +85,8 @@ void Mosaic::reconstructImageFromDB()
 
 void Mosaic::matchSimiliarImage(DB database)
 {
+	//cout << endl << "START MATCHING..." << endl;
+
 	// Change base to a base of eigenvectors - PCA
 	Mat queryHistoEig = imagesDB.getHistogramMatrix()*database.getEigenVectors().t();
 	Mat histoEig = database.getHistoEig().t();
@@ -96,23 +98,42 @@ void Mosaic::matchSimiliarImage(DB database)
 	int cols = histoEig.cols;
 	int index = -1;
 	
-	//double t;
-	//t = (double)getTickCount();
+	
+	//double t = (double)getTickCount();
+	
+	int label = -1;
+	Mat currentCluster;
+	for (int i = 0; i < qRows; i++)
+	{
+		// Find which cluster the query image is connected to
+		label = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), database.centers_);
+		int clusterRows = database.clusters_[label].rows;
+		currentCluster = database.clusters_[label];
+
+		// Search in the found cluster
+		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), currentCluster);
+		int imageIndex = database.labelIndexes_[label][index];
+		pushSimilarImage(database.getImage(imageIndex));
+	}
+	
+	/*
 	for (int i = 0; i < qRows; i++)
 	{	
 		// Use L2-norm and find closest vector
-		//index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
 
 		// Use L1-norm and find closest vector
-		index = L1Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+		//index = L1Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
 
 		// Save the index for the most similar image
 		pushSimilarImage(database.getImage(index));
-	}
+	}*/
+	
 	//double b = (double)getTickCount();
 	//t = (b - t) / getTickFrequency();
-	//cout << "TOTAL TIME: " << t << endl;
-	
+	//cout << endl << endl << "TOTAL TIME FOR L1: " << t << endl << endl;
+	//cout << endl << "MATCHING DONE" << endl;
+
 }
 
 int Mosaic::L2Norm(Mat qHistoEigVec, Mat histoEig)
@@ -136,7 +157,7 @@ int Mosaic::L2Norm(Mat qHistoEigVec, Mat histoEig)
 
 int Mosaic::L1Norm(Mat qHistoEigVec, Mat histoEig)
 {
-	float sum = 0.0f;
+	float suma = 0.0f;
 	float min = 10000.0f;
 	float diff = 0.0f;
 	int index = 0;
@@ -148,7 +169,8 @@ int Mosaic::L1Norm(Mat qHistoEigVec, Mat histoEig)
 	{
 		// Point to the row of the histoEig matrix, fast access to the values at row i
 		float* histEigRow = histoEig.ptr<float>(i);
-		sum = 0;
+				
+		suma = 0;
 		for (int j = 0; j < histoEig.cols; j++)
 		{
 			diff = histEigRow[j] - qEigVec[j];
@@ -157,12 +179,12 @@ int Mosaic::L1Norm(Mat qHistoEigVec, Mat histoEig)
 			if (diff < 0.0000f)
 				diff = -1.0f*diff;
 
-			sum = sum + diff;
+			suma = suma + diff;
 		}
 
-		if (sum < min)
+		if (suma < min)
 		{
-			min = sum;
+			min = suma;
 			// Save index for smallest value
 			index = i;
 		}
@@ -170,6 +192,7 @@ int Mosaic::L1Norm(Mat qHistoEigVec, Mat histoEig)
 	}
 	return index;
 }
+
 
 void Mosaic::pushSimilarImage(Image similarImage)
 {

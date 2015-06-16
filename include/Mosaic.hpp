@@ -15,7 +15,7 @@ private:
 	const int SIZE_OF_PATCH;// (32x32 large patches)
 	const int BIN_SIZE = 4;
 	Mat image_source_; // This image source
-	Mat image_result_; // The mosaic
+	
 	vector<Image> similar_image_; // Contains similar images in the same order as the DB
 
 	// Set the images for this mosaic to a DB
@@ -23,13 +23,13 @@ private:
 	DB imagesDB;
 
 public:
-
+	Mat image_result_; // The mosaic
 	// Constructor
 	Mosaic(Mat image, int patch_size);
 
 	// Save the image to JPG
 	void saveImage(string image_name); // Saves the result image to desktop as JPG
-
+	
 	// Image histogram matching
 	void matchSimiliarImage(DB database); // Get the similar image
 	void pushSimilarImage(Image similarImage); // Push back the similar image to similar image vector

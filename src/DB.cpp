@@ -110,7 +110,7 @@ void DB::initializeMatrices()
 {
 	// Initiate the H (nImages x nBin^3)
 	setHistogramMatrix(images_);
-
+	
 	// Initiate the C (nBin^3 x nBin^3)
 	setCorrelationMatrix(histogramMatrix_);
 
@@ -119,6 +119,43 @@ void DB::initializeMatrices()
 
 	// Initiate the HE (nImages x nBin^3) * (nBin^3 x nEigvectors)
 	setHistoEig(histogramMatrix_, eigenVectors_);
+
+	// Should take parameters: nClusters, nAttempts, nRuns
+	setKMeans(nClusters_, nAttempts_);
+}
+
+void DB::setKMeans(int nClusters, int nAttempts)
+{
+	double t = (double)getTickCount();
+	// Run K-means
+	cv::kmeans(histoEig_.t(),
+		nClusters,
+		labels_,
+		TermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 100, 1.0),
+		nAttempts,
+		KMEANS_RANDOM_CENTERS,
+		centers_);
+
+	// Create a map of label indexes
+	// Create cluster
+	clusters_.resize(nClusters);
+	labelIndexes_.resize(nClusters);
+
+	Mat H = histoEig_.t();
+	for (int i = 0; i < labels_.size(); i++){
+		clusters_[labels_[i]].push_back((H(Rect(0, i, N_EIGENVECTORS, 1))));
+		labelIndexes_[labels_[i]].push_back(i);
+	}
+
+	for (int i = 0; i < clusters_.size(); i++)
+		cout << "Cluster " << i << " has " << clusters_[i].rows << " images" << endl;
+	
+	double b = (double)getTickCount();
+	t = (b - t) / getTickFrequency();
+
+	cout << endl << "K-MEANS CLUSTERING IS DONE" << endl;
+	cout << endl << "TIME FOR K-MEANS: " << t << endl;
+	cout << "--------------------------------------------";
 }
 
 void DB::setHistogramMatrix(vector<Image> imageMatrices)
@@ -134,6 +171,11 @@ void DB::setHistogramMatrix(vector<Image> imageMatrices)
 
 	H = H.t();
 	histogramMatrix_ = H.clone();
+
+	//cout << endl << "--------------------------------------------";
+	//cout << endl << "HISTOGRAM MATRIX H IS DONE" << endl;
+	//cout << "--------------------------------------------";
+
 }
 
 Mat DB::getHistogramMatrix()
@@ -152,6 +194,7 @@ Mat DB::getCorrelationMatrix()
 	return correlationMatrix_;
 }
 
+// TODO: Check if normalizing is done correctly
 void DB::setEigenVectors(Mat H)
 {
 	// Perform PCA
@@ -160,7 +203,10 @@ void DB::setEigenVectors(Mat H)
 	// E - A matrix of size (nBin^3 x nImages)
 	// Get the best eigenvectors and save them
 	eigenVectors_ = pca.eigenvectors.clone();
-	// TODO: Check if normalizing is done correctly
+
+	//cout << endl << "--------------------------------------------";
+	//cout << endl << "PCA IS DONE" << endl;
+	//cout << "--------------------------------------------";
 }
 
 Mat DB::getEigenVectors()

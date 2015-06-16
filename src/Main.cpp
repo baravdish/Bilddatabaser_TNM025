@@ -24,13 +24,12 @@ int main()
 	if (!image_temp.data){
 		cout << "Zlatan is too big!" << endl; return -1;}
 	
-	string extension = "3"; // 4 => 8x8, 3 => 16x16, 2 => 32x32
+	string extension = "3"; // 2 => 32x32, 3 => 16x16, 4 => 8x8
 	int patch_size = 16;
 	vector<string> inputFolders = { "animal", "beach", "cat", "colorful",
 								    "doll", "elegant", "flower", "food", "formal", "garden" };
 	
-	vector<string> animalFolder = { "animal4" };
-
+	vector<string> animalFolder = { "animal4"};
 	for (int i = 0; i < inputFolders.size(); i++)
 		inputFolders[i] += extension;
 
@@ -41,44 +40,68 @@ int main()
 	// Choose mode: 
 	// 0 if you want to see zlatan
 	// 1 if you want to start the cam
-#define CAM 0
+#define CAM 1
 
 	if (CAM)
 	{
 		VideoCapture cap(0);
-		char *name = "Window";
+		char *name = "Rendering";
+		char *original = "Original";
 		namedWindow(name, CV_WINDOW_FULLSCREEN);
+		namedWindow(original, CV_WINDOW_FULLSCREEN);
+
 		if (!cap.isOpened())
 		{
 			cout << "Could not open the camera! " << endl;
 			return -1;
 		}
 
+		int count = 0;
+		vector<double> times;
 		while (true)
-		{
+		{	
+			double t = (double)getTickCount();
 			Mat frame;
 			
 			// Grab a frame from camera
 			cap >> frame;
-			
+			resize(frame, frame, Size(400, 400), 0, 0, INTER_AREA);
+			imshow(original, frame);
+
+			double a = (double)getTickCount();
+
 			// Create a database of patches from a query image
 			Mosaic zlatan = Mosaic(frame, patch_size);
-			
+
+			a = ((double)getTickCount() - a) / getTickFrequency();
+
 			// Match similar images in the mosaic with the database with PCA/KLT and L2-norm
 			zlatan.matchSimiliarImage(database);
+			
 
 			// Reconstruct the matched images
 			zlatan.reconstructImageFromDB();
 
-			imshow(name, zlatan.getImageResult());
+			double b = (double)getTickCount();
+			t = (b - t) / getTickFrequency();
+			count++;
+			if (count % 60 == 0)
+			{
+				cout << "TOTAL TIME: " << t << endl;
+				cout << "TIME FOR MATCHING: " << a << endl;
+
+				cout << "FPS: " << (double) (1.0 / t)<< endl;
+				count = 0;
+			}
+
+			//resize(zlatan.image_result_, zlatan.image_result_, Size(200, 200), 0, 0, INTER_AREA);
+			imshow(name, zlatan.image_result_);
+			
 			cvWaitKey(1);
 		}
 	}
 	else
 	{
-		double t;
-		t = (double)getTickCount();
-		
 		// Create a database of patches from a query image
 		Mosaic zlatan = Mosaic(image_temp, patch_size);
 
@@ -87,10 +110,6 @@ int main()
 
 		// Reconstruct the matched images
 		zlatan.reconstructImageFromDB();
-		
-		double b = (double)getTickCount();
-		t = (b - t) / getTickFrequency();
-		cout << "TIME TO BUILD ZLATAN: " << t << endl;
 
 		// Write and save the reconstructed image
 		zlatan.saveImage(image_name);
