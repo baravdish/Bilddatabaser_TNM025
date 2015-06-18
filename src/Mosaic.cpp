@@ -58,8 +58,10 @@ void Mosaic::setImagesDB()
 // TODO: Maybe send in a vector with matched images instead of DB?
 void Mosaic::reconstructImageFromDB()
 {
+	double t = (double)getTickCount();
+
 	// Initiates sizes and numbers
-	int size_of_patch = imagesDB.getImage(0).getImageMat().rows;
+	int size_of_patch = imagesDB.getImage(0).image_mat_.rows;
 	int nPatchesX = image_source_.cols / size_of_patch;
 	int nPatchesY = image_source_.rows / size_of_patch;
 
@@ -73,7 +75,7 @@ void Mosaic::reconstructImageFromDB()
 	{
 		for (int x = 0; x < nPatchesX; x++)
 		{
-			Mat similar_patch = similar_image_[count].getImageMat();
+			Mat similar_patch = similar_image_[count].image_mat_;
 			similar_patch.copyTo(constructedImage(cv::Rect(x*size_of_patch, y*size_of_patch, size_of_patch, size_of_patch))); // (roiLeft, roiTop, roiWidth, roiHeight)
 			count++;
 		}
@@ -81,12 +83,14 @@ void Mosaic::reconstructImageFromDB()
 
 	// Save the constructed image as result
 	image_result_ = constructedImage;
+	double b = (double)getTickCount();
+	t = (b - t) / getTickFrequency(); 
+	//cout << "REC TIME " << t << endl;
 }
 
 void Mosaic::matchSimiliarImage(DB database)
 {
 	//cout << endl << "START MATCHING..." << endl;
-
 	// Change base to a base of eigenvectors - PCA
 	Mat queryHistoEig = imagesDB.getHistogramMatrix()*database.getEigenVectors().t();
 	Mat histoEig = database.getHistoEig().t();
@@ -98,9 +102,7 @@ void Mosaic::matchSimiliarImage(DB database)
 	int cols = histoEig.cols;
 	int index = -1;
 	
-	
-	//double t = (double)getTickCount();
-	
+
 	int label = -1;
 	Mat currentCluster;
 	for (int i = 0; i < qRows; i++)
@@ -115,20 +117,20 @@ void Mosaic::matchSimiliarImage(DB database)
 		int imageIndex = database.labelIndexes_[label][index];
 		pushSimilarImage(database.getImage(imageIndex));
 	}
-	
+
 	/*
 	for (int i = 0; i < qRows; i++)
 	{	
 		// Use L2-norm and find closest vector
-		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+		//index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
 
 		// Use L1-norm and find closest vector
-		//index = L1Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
+		index = L2Norm(queryHistoEig(Rect(0, i, qCols, 1)), histoEig);
 
 		// Save the index for the most similar image
 		pushSimilarImage(database.getImage(index));
-	}*/
-	
+	}	*/
+
 	//double b = (double)getTickCount();
 	//t = (b - t) / getTickFrequency();
 	//cout << endl << endl << "TOTAL TIME FOR L1: " << t << endl << endl;

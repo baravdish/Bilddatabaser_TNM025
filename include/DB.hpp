@@ -12,9 +12,9 @@ using namespace cv;
 class DB
 {
 	private:
-		const int N_EIGENVECTORS = 25; 
+		const int N_EIGENVECTORS = 10; 
 		const int BIN_SIZE = 4; // (4x4x4)
-		const int nClusters_ = 100; // Golden rule nClusters = sqrt(nImages/2)
+		const int nClusters_ = 120; // Golden rule nClusters = sqrt(nImages/2)
 		const int nAttempts_ = 20;
 
 	 	vector<Image> images_; // Vector containing all the image objects in this DB

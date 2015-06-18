@@ -169,9 +169,9 @@ void DB::setHistogramMatrix(vector<Image> imageMatrices)
 		h.copyTo(H(Rect(i, 0, 1, pow(BIN_SIZE, 3))));
 	}
 
-	H = H.t();
-	histogramMatrix_ = H.clone();
-
+	//H = H.t();
+	//histogramMatrix_ = H.clone();
+	histogramMatrix_ = H.t();
 	//cout << endl << "--------------------------------------------";
 	//cout << endl << "HISTOGRAM MATRIX H IS DONE" << endl;
 	//cout << "--------------------------------------------";

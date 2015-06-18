@@ -11,7 +11,7 @@ using namespace cv;
 int main()
 {
 	// Setup directory and folder paths, no recursive solution yet
-	string image_name = "zlatan_blue_background_1920x1080.jpg";
+	string image_name = "zlatan_blue-yellow_background_1440x900.jpg";
 
 	// ----> Directory for: KRISTOFER <-----
 	//string mainDirectory = "C:/Users/StoffesBok/Bilddatabaser_TNM025/dataset/";
@@ -24,12 +24,14 @@ int main()
 	if (!image_temp.data){
 		cout << "Zlatan is too big!" << endl; return -1;}
 	
-	string extension = "3"; // 2 => 32x32, 3 => 16x16, 4 => 8x8
-	int patch_size = 16;
-	vector<string> inputFolders = { "animal", "beach", "cat", "colorful",
+	string extension = "2"; // 2 => 32x32, 3 => 16x16, 4 => 8x8
+	int patch_size = 32;
+
+	vector<string> inputFolders = { "andy_warhol", "animal", "beach", "cat", "claude_monet", "colorful",
 								    "doll", "elegant", "flower", "food", "formal", "garden" };
 	
-	vector<string> animalFolder = { "animal4"};
+	vector<string> animalFolder = { "animal4", "garden4", "beach"};
+
 	for (int i = 0; i < inputFolders.size(); i++)
 		inputFolders[i] += extension;
 
@@ -65,14 +67,12 @@ int main()
 			
 			// Grab a frame from camera
 			cap >> frame;
-			resize(frame, frame, Size(400, 400), 0, 0, INTER_AREA);
+			resize(frame, frame, Size(300, 300), 0, 0, INTER_AREA);
 			imshow(original, frame);
 
 			double a = (double)getTickCount();
-
 			// Create a database of patches from a query image
 			Mosaic zlatan = Mosaic(frame, patch_size);
-
 			a = ((double)getTickCount() - a) / getTickFrequency();
 
 			// Match similar images in the mosaic with the database with PCA/KLT and L2-norm
@@ -85,10 +85,10 @@ int main()
 			double b = (double)getTickCount();
 			t = (b - t) / getTickFrequency();
 			count++;
-			if (count % 60 == 0)
+			if (count % 1 == 0)
 			{
 				cout << "TOTAL TIME: " << t << endl;
-				cout << "TIME FOR MATCHING: " << a << endl;
+				cout << "TIME FOR CONSTRUCTOR: " << a << endl;
 
 				cout << "FPS: " << (double) (1.0 / t)<< endl;
 				count = 0;
